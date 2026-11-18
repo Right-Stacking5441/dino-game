@@ -109,8 +109,28 @@
   // --consent-h), so it never sits on top of the header or the last lines.
   function syncBannerHeight() {
     var el = document.getElementById('consent-banner');
-    var h = el && !el.hidden ? el.offsetHeight : 0;
-    document.documentElement.style.setProperty('--consent-h', h + 'px');
+    var root = document.documentElement;
+    var open = el && !el.hidden;
+    // With very large text the copy scrolls inside the banner. When the
+    // banner is at the bottom, cap the copy so the whole header (all site
+    // links and EN ES PT) stays visible above it, down to about 3 lines.
+    var p = open ? el.querySelector('p') : null;
+    var header = document.querySelector('.site-header');
+    var atTop = window.matchMedia &&
+      window.matchMedia('(orientation: landscape) and (max-height: 500px)').matches;
+    if (p && header && !atTop) {
+      root.style.removeProperty('--consent-p-max');
+      var headerBottom = header.getBoundingClientRect().bottom + window.pageYOffset;
+      var rest = el.offsetHeight - p.offsetHeight;
+      var line = parseFloat(window.getComputedStyle(p).lineHeight) ||
+        parseFloat(window.getComputedStyle(p).fontSize) * 1.5;
+      var room = window.innerHeight - headerBottom - rest - 8;
+      root.style.setProperty('--consent-p-max', Math.max(room, line * 3) + 'px');
+    } else {
+      root.style.removeProperty('--consent-p-max');
+    }
+    var h = open ? el.offsetHeight : 0;
+    root.style.setProperty('--consent-h', h + 'px');
   }
   window.addEventListener('resize', syncBannerHeight);
   window.addEventListener('orientationchange', syncBannerHeight);

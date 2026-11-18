@@ -21,7 +21,7 @@
       <a href="/privacy/">Privacy</a>
     </nav>
     <nav class="lang-switch" aria-label="Language">
-      <a href="/" hreflang="en" lang="en" title="English" aria-label="EN, English">EN</a>
+      <a href="/" hreflang="en" lang="en" title="English" aria-label="EN, English" aria-current="page">EN</a>
       <a href="/es/" hreflang="es" lang="es" title="Español" aria-label="ES, Español">ES</a>
       <a href="/pt-br/" hreflang="pt-BR" lang="pt-BR" title="Português (Brasil)" aria-label="PT, Português (Brasil)">PT</a>
     </nav>
@@ -65,6 +65,14 @@
     q('.site-header .wordmark')[0].href = t.home;
     document.querySelector('.site-header').classList.add('site-header--wrap');
     q('.lang-switch')[0].setAttribute('aria-label', t.switchLabel);
+    var codes = q('.lang-switch a');
+    for (var c = 0; c < codes.length; c++) {
+      if (codes[c].textContent === t.code) {
+        codes[c].setAttribute('aria-current', 'page');
+      } else {
+        codes[c].removeAttribute('aria-current');
+      }
+    }
     var nav = q('.site-header nav')[0];
     nav.setAttribute('aria-label', t.navLabel);
     var n = nav.querySelectorAll('a');
