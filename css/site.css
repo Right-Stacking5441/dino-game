@@ -1071,6 +1071,15 @@ html:has(meta[name="dino-leaderboard-api"]) .article {
   white-space: nowrap;
 }
 
+/* Tester 9c22ee6 A1 (WCAG 2.2 2.5.8): the revealed Report/Remove button is
+   at least 24px tall itself, not only through its 44px ::before hit area. */
+.row-action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  vertical-align: middle;
+}
+
 /* Tester info: the confirm's own buttons are at least 24px tall with real
    padding on a mouse too (touch gets 44px below). */
 .row-confirm .confirm-btn--quiet {
