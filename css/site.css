@@ -110,78 +110,52 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Language switcher: a small "EN" button after the site nav that opens the
-   three languages. The 44px tap area comes from padding with matching
-   negative margins, so the header keeps its live height. */
+/* Language switcher: a visible EN ES PT row after the site nav, behind a
+   thin rule. Each code has a 44x44 tap area from a ::before overlay, so the
+   letters and the header height stay as they are. min-width keeps the
+   overlays from overlapping. */
 .site-header nav:first-of-type {
   margin-left: auto;
 }
 
 .site-header .lang-switch {
-  position: relative;
-  margin-left: -0.35rem;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0;
+  margin-left: 0.15rem;
+  padding-left: 0.85rem;
+  border-left: 1px solid var(--line);
   font-size: 0.85rem;
   letter-spacing: 0.02em;
 }
 
-.lang-switch summary {
-  display: block;
-  padding: 0.7rem 0.55rem;
-  margin: -0.7rem -0.55rem -0.7rem 0;
+.site-header .lang-switch a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 44px;
+  padding: 0 0.15rem;
   color: var(--muted);
-  cursor: pointer;
-  list-style: none;
-  user-select: none;
+  text-decoration: none;
   -webkit-tap-highlight-color: transparent;
 }
 
-.lang-switch summary::-webkit-details-marker {
-  display: none;
-}
-
-.lang-switch summary::after {
+.site-header .lang-switch a::before {
   content: "";
-  display: inline-block;
-  width: 0.32em;
-  height: 0.32em;
-  margin: 0 0 0.2em 0.4em;
-  border-right: 1px solid currentColor;
-  border-bottom: 1px solid currentColor;
-  transform: rotate(45deg);
-}
-
-.lang-switch summary:hover,
-.lang-switch details[open] summary {
-  color: var(--text);
-}
-
-.lang-switch ul {
   position: absolute;
-  top: calc(100% + 0.55rem);
-  right: -0.55rem;
-  z-index: 20;
-  min-width: 11rem;
-  margin: 0;
-  padding: 0.25rem 0;
-  list-style: none;
-  background: var(--page-bg);
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  letter-spacing: 0;
+  left: 50%;
+  top: 50%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
 }
 
-.site-header .lang-switch ul a {
-  display: block;
-  min-height: 44px;
-  box-sizing: border-box;
-  padding: 0.7rem 0.9rem;
-  line-height: 1.2;
+.site-header .lang-switch a:hover,
+.site-header .lang-switch a[aria-current="page"] {
   color: var(--text);
-  font-size: 0.9rem;
-}
-
-.site-header .lang-switch ul a:hover {
-  background: var(--ad-bg);
   text-decoration: none;
 }
 
@@ -729,18 +703,20 @@ a:hover {
 }
 
 @media (max-width: 40rem) {
-  /* Spanish and Portuguese nav labels are too long for one row on phones,
-     so the switcher stays up by the wordmark and the links drop below. */
-  .site-header--wrap {
+  /* Phones: wordmark and EN ES PT share the top row, site links go
+     underneath. Same for every language. */
+  .site-header {
     row-gap: 0.45rem;
   }
 
-  .site-header--wrap .lang-switch {
+  .site-header .lang-switch {
     order: 1;
     margin-left: auto;
+    padding-left: 0;
+    border-left: 0;
   }
 
-  .site-header--wrap nav:first-of-type {
+  .site-header nav:first-of-type {
     order: 2;
     flex-basis: 100%;
     gap: 0.5rem 1rem;
@@ -755,15 +731,6 @@ a:hover {
 @media (max-width: 360px) {
   :root:not(:lang(en)) .score-line {
     font-size: 0.8rem;
-  }
-
-  /* English at 320px: the switcher drops to its own short row, on the right. */
-  .site-header:not(.site-header--wrap) {
-    row-gap: 0.2rem;
-  }
-
-  .site-header:not(.site-header--wrap) .lang-switch {
-    margin-left: auto;
   }
 
   .site-header--wrap nav:first-of-type {
@@ -862,6 +829,10 @@ body.has-consent-banner {
   margin: 0;
   flex: 1 1 16rem;
   max-width: 40rem;
+  /* With very large text the copy scrolls inside the banner, so the banner
+     never grows over the header and the buttons stay on screen. */
+  max-height: 40dvh;
+  overflow-y: auto;
 }
 
 .consent-actions {

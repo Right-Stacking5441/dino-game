@@ -282,35 +282,6 @@
     }
   }
 
-  // Language switcher (<details> in the header, on every page): close it on
-  // an outside tap or Escape. It works without this; this only tidies up.
-  // Lives here because consent.js is the one script every page loads.
-  function bindLanguageMenu() {
-    var menu = document.querySelector('.lang-switch details');
-    if (!menu) {
-      return;
-    }
-    document.addEventListener('click', function (e) {
-      if (menu.open && !menu.contains(e.target)) {
-        menu.open = false;
-      }
-    });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && menu.open) {
-        menu.open = false;
-        var summary = menu.querySelector('summary');
-        if (summary) {
-          summary.focus();
-        }
-      }
-    });
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', bindLanguageMenu);
-  } else {
-    bindLanguageMenu();
-  }
-
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
