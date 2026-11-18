@@ -63,7 +63,7 @@ a:hover {
 .skip-link {
   position: absolute;
   left: 0.75rem;
-  top: -3rem;
+  top: -8rem;
   z-index: 20;
   background: #fff;
   padding: 0.4rem 0.7rem;
@@ -110,21 +110,82 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Language switcher: sits right after the site nav, split off by a rule. */
+/* Language switcher: a small "EN" button after the site nav that opens the
+   three languages. The 44px tap area comes from padding with matching
+   negative margins, so the header keeps its live height. */
 .site-header nav:first-of-type {
   margin-left: auto;
 }
 
 .site-header .lang-switch {
-  gap: 0.6rem;
-  padding-left: 1rem;
-  border-left: 1px solid var(--line);
+  position: relative;
+  margin-left: -0.35rem;
   font-size: 0.85rem;
   letter-spacing: 0.02em;
 }
 
-.site-header .lang-switch a[aria-current="page"] {
+.lang-switch summary {
+  display: block;
+  padding: 0.7rem 0.55rem;
+  margin: -0.7rem -0.55rem -0.7rem 0;
+  color: var(--muted);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lang-switch summary::-webkit-details-marker {
+  display: none;
+}
+
+.lang-switch summary::after {
+  content: "";
+  display: inline-block;
+  width: 0.32em;
+  height: 0.32em;
+  margin: 0 0 0.2em 0.4em;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.lang-switch summary:hover,
+.lang-switch details[open] summary {
   color: var(--text);
+}
+
+.lang-switch ul {
+  position: absolute;
+  top: calc(100% + 0.55rem);
+  right: -0.55rem;
+  z-index: 20;
+  min-width: 11rem;
+  margin: 0;
+  padding: 0.25rem 0;
+  list-style: none;
+  background: var(--page-bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  letter-spacing: 0;
+}
+
+.site-header .lang-switch ul a {
+  display: block;
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 0.7rem 0.9rem;
+  line-height: 1.2;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.site-header .lang-switch ul a:hover {
+  background: var(--ad-bg);
+  text-decoration: none;
+}
+
+.site-header .lang-switch a[aria-current="page"] {
   font-weight: 600;
 }
 
@@ -183,7 +244,9 @@ a:hover {
   line-height: 1.3;
   text-align: center;
   pointer-events: none;
-  white-space: nowrap;
+  width: max-content;
+  max-width: calc(100% - 1rem);
+  text-wrap: balance;
 }
 .stage-hint[hidden],
 .stage-hint[data-state="running"],
@@ -651,25 +714,6 @@ a:hover {
     font-size: 16px;
   }
 
-  /* Phones: wordmark and language switcher share the top row, and the
-     site links get their own row underneath. */
-  .site-header {
-    row-gap: 0.45rem;
-  }
-
-  .site-header .lang-switch {
-    order: 1;
-    margin-left: auto;
-    padding-left: 0;
-    border-left: 0;
-  }
-
-  .site-header nav:first-of-type {
-    order: 2;
-    flex-basis: 100%;
-    margin-left: 0;
-  }
-
   .hero h1 {
     font-size: 1.45rem;
   }
@@ -681,6 +725,50 @@ a:hover {
 
   .article {
     padding-top: 3rem;
+  }
+}
+
+@media (max-width: 40rem) {
+  /* Spanish and Portuguese nav labels are too long for one row on phones,
+     so the switcher stays up by the wordmark and the links drop below. */
+  .site-header--wrap {
+    row-gap: 0.45rem;
+  }
+
+  .site-header--wrap .lang-switch {
+    order: 1;
+    margin-left: auto;
+  }
+
+  .site-header--wrap nav:first-of-type {
+    order: 2;
+    flex-basis: 100%;
+    gap: 0.5rem 1rem;
+    margin-left: 0;
+  }
+
+  .toolbar-actions {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 360px) {
+  :root:not(:lang(en)) .score-line {
+    font-size: 0.8rem;
+  }
+
+  /* English at 320px: the switcher drops to its own short row, on the right. */
+  .site-header:not(.site-header--wrap) {
+    row-gap: 0.2rem;
+  }
+
+  .site-header:not(.site-header--wrap) .lang-switch {
+    margin-left: auto;
+  }
+
+  .site-header--wrap nav:first-of-type {
+    gap: 0.4rem 0.65rem;
+    font-size: 0.8rem;
   }
 }
 
@@ -756,6 +844,10 @@ a:hover {
   box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04);
 }
 
+body.has-consent-banner {
+  padding-bottom: var(--consent-h, 0px);
+}
+
 #consent-banner[hidden] {
   display: none !important;
 }
@@ -774,6 +866,7 @@ a:hover {
 
 .consent-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.4rem;
 }
 
@@ -812,5 +905,50 @@ a:hover {
 
   #consent-banner button {
     min-height: 44px;
+  }
+
+  /* Keep the banner to one row (text beside the buttons) so it stays short. */
+  #consent-banner {
+    flex-wrap: nowrap;
+  }
+
+  #consent-banner p {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .consent-actions {
+    flex-wrap: nowrap;
+  }
+
+  /* The banner sits at the top here, so push the page (header included)
+     down below it instead of covering the header and switcher, and shrink
+     the stage by the same amount so the dino and ground stay in view. */
+  body.has-consent-banner {
+    padding-top: var(--consent-h, 0px);
+    padding-bottom: 0;
+  }
+
+  body.has-consent-banner #game-stage {
+    max-height: calc(100dvh - 7.5rem - var(--consent-h, 0px));
+    height: min(calc(100dvh - 7.5rem - var(--consent-h, 0px)), 25vw);
+  }
+}
+
+/* Touch screens: 44px targets for the game buttons and footer links. */
+@media (pointer: coarse) {
+  .toolbar button,
+  #exit-fullscreen {
+    min-height: 44px;
+  }
+
+  .footer-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .footer-links {
+    row-gap: 0;
   }
 }

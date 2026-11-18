@@ -19,18 +19,21 @@
   <meta name="theme-color" content="#fafaf8">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_ES">
+  <meta property="og:locale:alternate" content="en_GB">
+  <meta property="og:locale:alternate" content="pt_BR">
+  <meta property="og:locale:alternate" content="es_419">
   <meta property="og:site_name" content="dino.game">
   <meta property="og:title" content="Juego del dinosaurio: juega sin tener que desconectarte">
   <meta property="og:description" content="Versión no oficial del T-Rex que sale en Chrome cuando no hay conexión, en cualquier navegador. Presiona Espacio o toca la pantalla para saltar.">
   <meta property="og:url" content="https://dino.game/es/">
-  <meta property="og:image" content="https://dino.game/assets/share-1200x630-es-nochrome.png">
+  <meta property="og:image" content="https://dino.game/assets/share-1200x630-es.png">
   <meta property="og:image:alt" content="T-Rex pixelado saltando entre dos cactus en el desierto, con un pterodáctilo a la derecha">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Juego del dinosaurio: juega sin tener que desconectarte">
   <meta name="twitter:description" content="Versión no oficial del T-Rex que sale en Chrome cuando no hay conexión, en cualquier navegador. Presiona Espacio o toca la pantalla para saltar.">
-  <meta name="twitter:image" content="https://dino.game/assets/share-1200x630-es-nochrome.png">
+  <meta name="twitter:image" content="https://dino.game/assets/share-1200x630-es.png">
   <meta name="twitter:image:alt" content="T-Rex pixelado saltando entre dos cactus en el desierto, con un pterodáctilo a la derecha">
   <link rel="stylesheet" href="/css/site.css">
   <script type="application/ld+json">
@@ -60,8 +63,8 @@
         "name": "Juego del dinosaurio",
         "url": "https://dino.game/es/",
         "description": "Versión no oficial del T-Rex que sale en Chrome cuando no hay conexión, en cualquier navegador. Presiona Espacio o toca la pantalla para saltar.",
-        "image": "https://dino.game/assets/share-1200x630-es-nochrome.png",
-        "screenshot": "https://dino.game/assets/share-1200x630-es-nochrome.png",
+        "image": "https://dino.game/assets/share-1200x630-es.png",
+        "screenshot": "https://dino.game/assets/share-1200x630-es.png",
         "applicationCategory": "GameApplication",
         "playMode": "SinglePlayer",
         "inLanguage": "es",
@@ -160,16 +163,16 @@
   "highScoreValue": "Récord en este dispositivo: {score}",
   "a11y": {
     "aria_label": "Juego del dinosaurio",
-    "description": "Presiona Espacio o la flecha hacia arriba, o toca el juego, para jugar al juego del dinosaurio. Presiona la flecha hacia abajo para agacharte.",
+    "description": "Presiona Espacio o la flecha hacia arriba, o toca el juego, para jugar al dinosaurio. Con la flecha hacia abajo te agachas.",
     "game_over": "Fin de la partida",
     "high_score": "Récord",
     "jump": "Saltar",
-    "game_started": "Partida iniciada",
+    "game_started": "Empieza la partida",
     "speed_toggle": "Empezar más despacio"
   },
   "consent": {
     "aria_label": "Cookies de analítica",
-    "text": "Este sitio solo usa Google Analytics si lo aceptas. No se guarda ninguna cookie de analítica hasta que elijas. Consulta la \u003ca href=\"/privacy/\">página de privacidad\u003c/a> o la \u003ca href=\"#cookie-settings\">configuración de cookies\u003c/a>.",
+    "text": "Este sitio solo usa Google Analytics si lo aceptas, y no se guarda ninguna cookie de analítica hasta que elijas una opción. Más información en la \u003ca href=\"/privacy/\">página de privacidad\u003c/a> o en la \u003ca href=\"#cookie-settings\">configuración de cookies\u003c/a>.",
     "accept": "Aceptar",
     "reject": "Rechazar"
   }
@@ -179,17 +182,22 @@
 </head>
 <body>
   <a class="skip-link" href="#article">Ir a las instrucciones</a>
-  <header class="site-header">
+  <header class="site-header site-header--wrap">
     <a class="wordmark" href="/es/">dino.game</a>
-    <nav aria-label="Sitio">
+    <nav aria-label="Menú del sitio">
       <a href="#faq">Preguntas frecuentes</a>
       <a href="/license/">Licencia</a>
       <a href="/privacy/">Privacidad</a>
     </nav>
     <nav class="lang-switch" aria-label="Idioma">
-      <a href="/" hreflang="en" lang="en" title="English">EN</a>
-      <a href="/es/" hreflang="es" lang="es" title="Español" aria-current="page">ES</a>
-      <a href="/pt-br/" hreflang="pt-BR" lang="pt-BR" title="Português (Brasil)">PT</a>
+      <details>
+        <summary lang="es" title="Español">ES</summary>
+        <ul>
+          <li><a href="/" hreflang="en" lang="en">English</a></li>
+          <li><a href="/es/" hreflang="es" lang="es" aria-current="page">Español</a></li>
+          <li><a href="/pt-br/" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a></li>
+        </ul>
+      </details>
     </nav>
   </header>
 

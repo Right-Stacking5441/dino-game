@@ -19,18 +19,20 @@
   <meta name="theme-color" content="#fafaf8">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
+  <meta property="og:locale:alternate" content="en_GB">
+  <meta property="og:locale:alternate" content="es_ES">
   <meta property="og:site_name" content="dino.game">
   <meta property="og:title" content="Jogo do dinossauro: jogue com o T-Rex sem a internet cair">
   <meta property="og:description" content="Versão não oficial do T-Rex que aparece no Chrome quando a internet cai, agora em qualquer navegador. Aperte Espaço ou toque na tela para pular.">
   <meta property="og:url" content="https://dino.game/pt-br/">
-  <meta property="og:image" content="https://dino.game/assets/share-1200x630-pt-nochrome.png">
+  <meta property="og:image" content="https://dino.game/assets/share-1200x630-pt-br.png">
   <meta property="og:image:alt" content="T-Rex pixelado pulando no deserto entre dois cactos, com um pterodáctilo à direita">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Jogo do dinossauro: jogue com o T-Rex sem a internet cair">
   <meta name="twitter:description" content="Versão não oficial do T-Rex que aparece no Chrome quando a internet cai, agora em qualquer navegador. Aperte Espaço ou toque na tela para pular.">
-  <meta name="twitter:image" content="https://dino.game/assets/share-1200x630-pt-nochrome.png">
+  <meta name="twitter:image" content="https://dino.game/assets/share-1200x630-pt-br.png">
   <meta name="twitter:image:alt" content="T-Rex pixelado pulando no deserto entre dois cactos, com um pterodáctilo à direita">
   <link rel="stylesheet" href="/css/site.css">
   <script type="application/ld+json">
@@ -60,8 +62,8 @@
         "name": "Jogo do dinossauro",
         "url": "https://dino.game/pt-br/",
         "description": "Versão não oficial do T-Rex que aparece no Chrome quando a internet cai, agora em qualquer navegador. Aperte Espaço ou toque na tela para pular.",
-        "image": "https://dino.game/assets/share-1200x630-pt-nochrome.png",
-        "screenshot": "https://dino.game/assets/share-1200x630-pt-nochrome.png",
+        "image": "https://dino.game/assets/share-1200x630-pt-br.png",
+        "screenshot": "https://dino.game/assets/share-1200x630-pt-br.png",
         "applicationCategory": "GameApplication",
         "playMode": "SinglePlayer",
         "inLanguage": "pt-BR",
@@ -160,16 +162,16 @@
   "highScoreValue": "Seu recorde neste aparelho: {score}",
   "a11y": {
     "aria_label": "Jogo do dinossauro",
-    "description": "Aperte Espaço ou a seta para cima, ou toque no jogo, para jogar o jogo do dinossauro. Aperte a seta para baixo para se abaixar.",
+    "description": "Para jogar o jogo do dinossauro, aperte Espaço ou a seta para cima, ou toque no jogo. Para se abaixar, aperte a seta para baixo.",
     "game_over": "Fim de jogo",
     "high_score": "Recorde",
     "jump": "Pular",
-    "game_started": "Partida iniciada",
+    "game_started": "O jogo começou",
     "speed_toggle": "Começar mais devagar"
   },
   "consent": {
     "aria_label": "Cookies de análise",
-    "text": "Este site só usa o Google Analytics se você aceitar. Nenhum cookie de análise é salvo até você escolher. Veja a \u003ca href=\"/privacy/\">página de privacidade\u003c/a> ou as \u003ca href=\"#cookie-settings\">configurações de cookies\u003c/a>.",
+    "text": "Só usamos o Google Analytics se você aceitar, e nenhum cookie de análise é salvo antes de você escolher. Mais detalhes na \u003ca href=\"/privacy/\">página de privacidade\u003c/a> e nas \u003ca href=\"#cookie-settings\">configurações de cookies\u003c/a>.",
     "accept": "Aceitar",
     "reject": "Recusar"
   }
@@ -179,17 +181,22 @@
 </head>
 <body>
   <a class="skip-link" href="#article">Pular para Como jogar</a>
-  <header class="site-header">
+  <header class="site-header site-header--wrap">
     <a class="wordmark" href="/pt-br/">dino.game</a>
-    <nav aria-label="Site">
+    <nav aria-label="Menu do site">
       <a href="#faq">Perguntas frequentes</a>
       <a href="/license/">Licença</a>
       <a href="/privacy/">Privacidade</a>
     </nav>
     <nav class="lang-switch" aria-label="Idioma">
-      <a href="/" hreflang="en" lang="en" title="English">EN</a>
-      <a href="/es/" hreflang="es" lang="es" title="Español">ES</a>
-      <a href="/pt-br/" hreflang="pt-BR" lang="pt-BR" title="Português (Brasil)" aria-current="page">PT</a>
+      <details>
+        <summary lang="pt-BR" title="Português (Brasil)">PT</summary>
+        <ul>
+          <li><a href="/" hreflang="en" lang="en">English</a></li>
+          <li><a href="/es/" hreflang="es" lang="es">Español</a></li>
+          <li><a href="/pt-br/" hreflang="pt-BR" lang="pt-BR" aria-current="page">Português (Brasil)</a></li>
+        </ul>
+      </details>
     </nav>
   </header>
 

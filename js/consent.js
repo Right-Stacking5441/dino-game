@@ -102,7 +102,18 @@
       el.hidden = true;
     }
     document.body.classList.remove('has-consent-banner');
+    syncBannerHeight();
   }
+
+  // The page is padded by the banner's height while it is open (CSS reads
+  // --consent-h), so it never sits on top of the header or the last lines.
+  function syncBannerHeight() {
+    var el = document.getElementById('consent-banner');
+    var h = el && !el.hidden ? el.offsetHeight : 0;
+    document.documentElement.style.setProperty('--consent-h', h + 'px');
+  }
+  window.addEventListener('resize', syncBannerHeight);
+  window.addEventListener('orientationchange', syncBannerHeight);
 
   function placeBanner(el) {
     var skip = document.querySelector('.skip-link');
@@ -184,6 +195,7 @@
     }
     el.hidden = false;
     document.body.classList.add('has-consent-banner');
+    syncBannerHeight();
     bindBannerButtons(el);
   }
 
@@ -268,6 +280,35 @@
     } else {
       showBanner();
     }
+  }
+
+  // Language switcher (<details> in the header, on every page): close it on
+  // an outside tap or Escape. It works without this; this only tidies up.
+  // Lives here because consent.js is the one script every page loads.
+  function bindLanguageMenu() {
+    var menu = document.querySelector('.lang-switch details');
+    if (!menu) {
+      return;
+    }
+    document.addEventListener('click', function (e) {
+      if (menu.open && !menu.contains(e.target)) {
+        menu.open = false;
+      }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && menu.open) {
+        menu.open = false;
+        var summary = menu.querySelector('summary');
+        if (summary) {
+          summary.focus();
+        }
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bindLanguageMenu);
+  } else {
+    bindLanguageMenu();
   }
 
   if (document.readyState === 'loading') {
