@@ -1387,8 +1387,7 @@ html.lb-text-large .board-row .board-score {
 }
 
 /* UI/UX nits (v2.2 round): at 200% text the 1st-place score gets a gap
-   above the step's top line, and at 320px, where Today and All time wrap
-   onto two lines, the divider between them goes. */
+   above the step's top line. */
 html.lb-text-large .place--1 .place-score { margin-bottom: 6px; }
 /* Stacked (below 48rem), the steps overlay shares its spare height between
    its two rows, so step 1's top line did not track the 1st place's bottom
@@ -1422,11 +1421,20 @@ html.lb-text-large .place--1 .place-score { margin-bottom: 6px; }
     line-height: 1;
   }
 }
-@media (max-width: 22rem) {
-  html.lb-text-large .board-switch button + button {
-    border-left: 0;
-    padding-left: 0;
-  }
+/* Today and All time: the divider goes only when they really wrap onto two
+   lines (Tester 755731c: ES/PT fit on one line at 320). The game script
+   measures with the class off and sets .board-switch--wrapped; wrapped,
+   both tabs start flush left, sharing the board content's left edge, and
+   stay stacked so dropping the padding can't flip the result. */
+.board-switch--wrapped {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.board-switch--wrapped button {
+  padding-left: 0;
+}
+.board-switch.board-switch--wrapped button + button {
+  border-left: 0;
 }
 
 /* Tester N6: on a phone at normal text size a long podium name wraps to a
