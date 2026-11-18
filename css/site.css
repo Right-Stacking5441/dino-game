@@ -110,6 +110,24 @@ a:hover {
   text-decoration: underline;
 }
 
+/* Language switcher: sits right after the site nav, split off by a rule. */
+.site-header nav:first-of-type {
+  margin-left: auto;
+}
+
+.site-header .lang-switch {
+  gap: 0.6rem;
+  padding-left: 1rem;
+  border-left: 1px solid var(--line);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+}
+
+.site-header .lang-switch a[aria-current="page"] {
+  color: var(--text);
+  font-weight: 600;
+}
+
 .hero {
   max-width: var(--stage-max);
   margin: 0 auto;
@@ -631,6 +649,25 @@ a:hover {
 @media (max-width: 640px) {
   body {
     font-size: 16px;
+  }
+
+  /* Phones: wordmark and language switcher share the top row, and the
+     site links get their own row underneath. */
+  .site-header {
+    row-gap: 0.45rem;
+  }
+
+  .site-header .lang-switch {
+    order: 1;
+    margin-left: auto;
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .site-header nav:first-of-type {
+    order: 2;
+    flex-basis: 100%;
+    margin-left: 0;
   }
 
   .hero h1 {
