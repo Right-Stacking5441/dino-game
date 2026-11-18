@@ -201,17 +201,22 @@
     </div>
 
     <section class="board" id="top10" aria-labelledby="top10-title">
-      <div class="board-head">
-        <h2 id="top10-title">Top 10</h2>
-        <div class="board-switch" role="group" aria-label="Board period">
-          <button type="button" data-period="today" aria-pressed="true">Today</button>
-          <button type="button" data-period="all" aria-pressed="false">All time</button>
+      <h2 class="visually-hidden" id="top10-title">Top 10</h2>
+      <p class="visually-hidden" id="board-msg" role="status" aria-live="polite" aria-atomic="true"></p>
+      <div class="entry-anchor" id="board-entry-slot"></div>
+      <div class="pixel-frame board-panel">
+        <div class="pixel-inner">
+          <div class="board-head">
+            <div class="board-switch" role="group" aria-label="Board period">
+              <button type="button" data-period="today" aria-pressed="true">Today</button>
+              <button type="button" data-period="all" aria-pressed="false">All time</button>
+            </div>
+            <p class="board-count" id="board-meta"></p>
+          </div>
+          <div class="board-body" id="board-body" data-state="idle"></div>
+          <p class="board-foot"><a href="/privacy/#leaderboard">Names are public</a></p>
         </div>
       </div>
-      <p class="board-meta" id="board-meta"></p>
-      <div class="board-entry-slot" id="board-entry-slot"></div>
-      <p class="board-msg" id="board-msg" role="status" aria-live="polite"></p>
-      <div class="board-body" id="board-body" data-state="idle"></div>
     </section>
 
     <article class="article" id="article">
@@ -220,7 +225,7 @@
       <p>On a computer, press <kbd class="kbd">Space</kbd> or the Up arrow (or click the game) to start and to&nbsp;jump. Hold the key for a full-height jump over a tall cluster, or let go just after take-off to cut the jump short, which is enough for a single small cactus. Press the Down arrow to duck, or press it in mid-air to drop faster. After a crash, Enter starts a new run straight away. Space and Up work too after a short pause, or you can click the game.</p>
       <p>On a phone or tablet, tap the game to start and to&nbsp;jump. You can’t duck by touch, so ducking needs a keyboard. Turn the screen to landscape for a wider view of what’s coming.</p>
       <p>There’s nothing to sign up for and no advert before the game. Mute turns the beeps off and Fullscreen gives the runner the whole screen. Your high score and your mute setting are saved in this browser.</p>
-      <p class="board-only board-note">If a run makes the day’s top 10, you can put a name on the board. There is no account.</p>
+      <p class="board-only board-note">A top 10 run can go on the board, with just a name.</p>
 
       <h2>Tips for a higher score</h2>
       <p>Watch the right-hand side of the desert, not the dinosaur. Obstacles are easier to judge when you see them arriving than when you stare at the T-Rex’s feet. At top speed, late jumps cause most crashes, not early ones.</p>

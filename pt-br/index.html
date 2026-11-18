@@ -181,54 +181,47 @@
     "periodGroup": "Período do placar",
     "today": "Hoje",
     "allTime": "De sempre",
-    "allTimeMeta": "Melhores pontuações públicas até agora",
     "countdown": "Novo placar em {time}",
     "countdownShort": "{h} h {m} min",
-    "countdownMinutes": "{m} min",
+    "countdownMinutes": "em {m} min",
     "hour": "hora",
     "hours": "horas",
     "minute": "minuto",
     "minutes": "minutos",
-    "and": " e ",
+    "and": " ",
     "you": "você",
-    "qualifyToday": "Você entrou no top 10 de hoje",
+    "qualifyToday": "Você entrou no top 10",
     "qualifyAll": "Você entrou no top 10 de sempre",
-    "qualifyBoth": "Você entrou no top 10 de hoje e no de sempre",
     "nameLabel": "Seu nome",
+    "publicLine": "Aparece publicamente. Não use seu nome real.",
     "post": "Publicar",
     "skip": "Agora não",
-    "hint": "De 2 a 16 caracteres. Apenas letras, números, espaços, - e _.",
+    "hint": "Apenas letras, números, espaços, - e _",
     "errChars": "Apenas letras, números, espaços, - e _",
     "errLength": "De 2 a 16 caracteres",
     "errBlocked": "Tente outro nome",
-    "notice": "Se você adicionar sua pontuação ao ranking, seu apelido aparecerá publicamente; não use seu nome real.",
-    "privacyLink": "Como usamos",
-    "savedToday": "Salvo como {name}, {nth} de hoje.",
-    "savedAll": "Salvo como {name}, {nth} de sempre.",
-    "newBest": "Novo recorde, você continua em {nth} lugar",
-    "emptyToday": "Ainda não há pontuações no placar de hoje",
-    "emptyAll": "Ainda não há pontuações de sempre",
-    "emptyBody": "Se uma partida entrar no top 10, você pode colocar um nome. Não precisa de conta.",
-    "loadingToday": "Carregando o top 10 de hoje",
-    "loadingAll": "Carregando o top 10 de sempre",
+    "privacyLink": "Os nomes são públicos",
+    "savedToday": "Salvo, {nth} de hoje.",
+    "savedAll": "Salvo, {nth} de sempre.",
+    "newBest": "Novo recorde, você segue em {nth}",
+    "empty": "Ainda não há pontuações",
+    "loading": "Carregando",
     "errorTitle": "Não foi possível carregar o placar",
-    "offlineTitle": "Você está offline, então o placar público não pode ser aberto",
-    "deviceSaved": "Seu recorde neste dispositivo continua salvo.",
+    "offlineTitle": "Você está offline",
     "tryAgain": "Tentar de novo",
     "report": "Denunciar",
     "reported": "Denunciado, obrigado",
-    "reportLabel": "Denunciar {name}",
     "remove": "Remover",
     "removeConfirm": "Remover sua pontuação?",
     "yes": "Sim",
     "no": "Não",
     "removed": "Sua pontuação foi removida.",
-    "postFailed": "Não foi possível publicar agora. Seu recorde neste dispositivo continua salvo.",
+    "postFailed": "Não foi possível publicar agora.",
     "tokenError": "Essa partida não pode ser publicada. A próxima, sim.",
     "rateError": "Muitas tentativas. Espere um minuto.",
     "ordinal": "dot",
     "thousands": ".",
-    "howToPlayNote": "Se uma partida entrar no top 10 do dia, você pode colocar um nome no placar. Não precisa de conta.",
+    "howToPlayNote": "Uma partida do top 10 pode ir para o placar, só com um nome.",
     "faqEnd": "Nesta página também há um top 10 público não oficial, mas o recorde deste dispositivo é o que sempre fica com você.",
     "faqRecord": "O top 10 deste site é nosso: não é oficial nem à prova de trapaças.",
     "footerLink": "Os 10 melhores"
@@ -281,17 +274,22 @@
     </div>
 
     <section class="board" id="top10" aria-labelledby="top10-title">
-      <div class="board-head">
-        <h2 id="top10-title">Os 10 melhores</h2>
-        <div class="board-switch" role="group" aria-label="Período do placar">
-          <button type="button" data-period="today" aria-pressed="true">Hoje</button>
-          <button type="button" data-period="all" aria-pressed="false">De sempre</button>
+      <h2 class="visually-hidden" id="top10-title">Os 10 melhores</h2>
+      <p class="visually-hidden" id="board-msg" role="status" aria-live="polite" aria-atomic="true"></p>
+      <div class="entry-anchor" id="board-entry-slot"></div>
+      <div class="pixel-frame board-panel">
+        <div class="pixel-inner">
+          <div class="board-head">
+            <div class="board-switch" role="group" aria-label="Período do placar">
+              <button type="button" data-period="today" aria-pressed="true">Hoje</button>
+              <button type="button" data-period="all" aria-pressed="false">De sempre</button>
+            </div>
+            <p class="board-count" id="board-meta"></p>
+          </div>
+          <div class="board-body" id="board-body" data-state="idle"></div>
+          <p class="board-foot"><a href="/privacy/#leaderboard">Os nomes são públicos</a></p>
         </div>
       </div>
-      <p class="board-meta" id="board-meta"></p>
-      <div class="board-entry-slot" id="board-entry-slot"></div>
-      <p class="board-msg" id="board-msg" role="status" aria-live="polite"></p>
-      <div class="board-body" id="board-body" data-state="idle"></div>
     </section>
 
     <article class="article" id="article">
@@ -300,7 +298,7 @@
       <p>No computador, aperte Espaço ou a seta para cima (ou clique no jogo) para começar e para pular. Segure a tecla para pular mais alto e passar por cima de um grupo de cactos grandes, ou solte logo depois que o dino sair do chão para dar um pulinho, o suficiente para um cacto pequeno. A seta para baixo faz o dinossauro se abaixar e, se você apertar no ar, ele desce mais rápido. Depois de bater, aperte Enter para começar outra partida na hora. Espaço e a seta para cima também funcionam, mas só depois de uma pequena pausa. Você também pode clicar no jogo.</p>
       <p>No celular ou no tablet, toque no jogo para começar e para pular. Na tela de toque não dá para abaixar; para isso, só com teclado. Vire o celular ou o tablet na horizontal para ver melhor o que vem pela frente.</p>
       <p>Não precisa se cadastrar e não tem anúncio antes do jogo. O botão Silenciar desliga os bipes, e o botão Tela cheia deixa o jogo ocupando a tela toda. Seu recorde e a configuração de som ficam salvos neste navegador.</p>
-      <p class="board-only board-note">Se uma partida entrar no top 10 do dia, você pode colocar um nome no placar. Não precisa de conta.</p>
+      <p class="board-only board-note">Uma partida do top 10 pode ir para o placar, só com um nome.</p>
 
       <h2>Dicas para fazer mais pontos</h2>
       <p>Olhe para o lado direito da tela, não para o dinossauro. É bem mais fácil acertar a hora de pular quando você vê os obstáculos chegando do que quando fica olhando para os pés do T-Rex. Na velocidade máxima, quase sempre você bate porque pulou tarde demais.</p>
