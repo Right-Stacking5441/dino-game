@@ -1386,6 +1386,49 @@ html.lb-text-large .board-row .board-score {
   html.lb-text-large .place-score { font-size: 0.9rem; }
 }
 
+/* UI/UX nits (v2.2 round): at 200% text the 1st-place score gets a gap
+   above the step's top line, and at 320px, where Today and All time wrap
+   onto two lines, the divider between them goes. */
+html.lb-text-large .place--1 .place-score { margin-bottom: 6px; }
+/* Stacked (below 48rem), the steps overlay shares its spare height between
+   its two rows, so step 1's top line did not track the 1st place's bottom
+   and the margin above barely showed. Step 1 is drawn by the 1st place
+   itself instead, so the score always sits 5px + 6px above its line. The
+   overlay's step 1 stays as an invisible spacer so steps 2 and 3 do not move. */
+@media (max-width: 47.99rem) {
+  html.lb-text-large .podium-steps .step--1 { visibility: hidden; }
+  html.lb-text-large .place--1::after {
+    content: "1" / "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    box-sizing: border-box;
+    height: var(--p1);
+    padding-bottom: 4px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    background:
+      url("../assets/leaderboard/horizon.png") repeat-x 0 0 / 600px 12px,
+      #efefe9;
+    image-rendering: pixelated;
+    color: var(--ink-game);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.55rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+}
+@media (max-width: 22rem) {
+  html.lb-text-large .board-switch button + button {
+    border-left: 0;
+    padding-left: 0;
+  }
+}
+
 /* Tester N6: on a phone at normal text size a long podium name wraps to a
    second line instead of cutting at about 8 characters, the same treatment
    as 200% text (UI/UX 6cd32a6). Short names are unchanged. */
