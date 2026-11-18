@@ -102,7 +102,38 @@
       el.hidden = true;
     }
     document.body.classList.remove('has-consent-banner');
+    syncBannerHeight();
   }
+
+  // The page is padded by the banner's height while it is open (CSS reads
+  // --consent-h), so it never sits on top of the header or the last lines.
+  function syncBannerHeight() {
+    var el = document.getElementById('consent-banner');
+    var root = document.documentElement;
+    var open = el && !el.hidden;
+    // With very large text the copy scrolls inside the banner. When the
+    // banner is at the bottom, cap the copy so the whole header (all site
+    // links and EN ES PT) stays visible above it, down to about 3 lines.
+    var p = open ? el.querySelector('p') : null;
+    var header = document.querySelector('.site-header');
+    var atTop = window.matchMedia &&
+      window.matchMedia('(orientation: landscape) and (max-height: 500px)').matches;
+    if (p && header && !atTop) {
+      root.style.removeProperty('--consent-p-max');
+      var headerBottom = header.getBoundingClientRect().bottom + window.pageYOffset;
+      var rest = el.offsetHeight - p.offsetHeight;
+      var line = parseFloat(window.getComputedStyle(p).lineHeight) ||
+        parseFloat(window.getComputedStyle(p).fontSize) * 1.5;
+      var room = window.innerHeight - headerBottom - rest - 8;
+      root.style.setProperty('--consent-p-max', Math.max(room, line * 3) + 'px');
+    } else {
+      root.style.removeProperty('--consent-p-max');
+    }
+    var h = open ? el.offsetHeight : 0;
+    root.style.setProperty('--consent-h', h + 'px');
+  }
+  window.addEventListener('resize', syncBannerHeight);
+  window.addEventListener('orientationchange', syncBannerHeight);
 
   function placeBanner(el) {
     var skip = document.querySelector('.skip-link');
@@ -139,24 +170,52 @@
     }
   }
 
+  // Localised pages put their banner text in #ui-strings (see i18n/).
+  // The text is our own build output, not user input.
+  function bannerStrings() {
+    var t = {
+      aria_label: 'Analytics cookies',
+      text: 'This site uses Google Analytics only if you accept. No analytics cookies are set until you choose. See the <a href="/privacy/">privacy page</a>, or <a href="#cookie-settings">Cookie settings</a>.',
+      accept: 'Accept',
+      reject: 'Reject'
+    };
+    var el = document.getElementById('ui-strings');
+    if (!el) {
+      return t;
+    }
+    try {
+      var c = JSON.parse(el.textContent || '{}').consent || {};
+      for (var k in t) {
+        if (typeof c[k] === 'string' && c[k]) {
+          t[k] = c[k];
+        }
+      }
+    } catch (err) {
+      // keep English
+    }
+    return t;
+  }
+
   function showBanner() {
     var el = document.getElementById('consent-banner');
     if (!el) {
       el = document.createElement('div');
       el.id = 'consent-banner';
       el.setAttribute('role', 'dialog');
-      el.setAttribute('aria-label', 'Analytics cookies');
+      var t = bannerStrings();
+      el.setAttribute('aria-label', t.aria_label);
       el.setAttribute('tabindex', '-1');
       el.innerHTML =
-        '<p>This site uses Google Analytics only if you accept. No analytics cookies are set until you choose. See the <a href="/privacy/">privacy page</a>, or <a href="#cookie-settings">Cookie settings</a>.</p>' +
+        '<p>' + t.text + '</p>' +
         '<div class="consent-actions">' +
-        '<button type="button" id="consent-accept">Accept</button>' +
-        '<button type="button" id="consent-reject">Reject</button>' +
+        '<button type="button" id="consent-accept">' + t.accept + '</button>' +
+        '<button type="button" id="consent-reject">' + t.reject + '</button>' +
         '</div>';
       placeBanner(el);
     }
     el.hidden = false;
     document.body.classList.add('has-consent-banner');
+    syncBannerHeight();
     bindBannerButtons(el);
   }
 

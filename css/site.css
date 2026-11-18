@@ -63,7 +63,7 @@ a:hover {
 .skip-link {
   position: absolute;
   left: 0.75rem;
-  top: -3rem;
+  top: -8rem;
   z-index: 20;
   background: #fff;
   padding: 0.4rem 0.7rem;
@@ -108,6 +108,59 @@ a:hover {
 .site-header nav a:hover {
   color: var(--text);
   text-decoration: underline;
+}
+
+/* Language switcher: a visible EN ES PT row after the site nav, behind a
+   thin rule. Each code has a 44x44 tap area from a ::before overlay, so the
+   letters and the header height stay as they are. min-width keeps the
+   overlays from overlapping. */
+.site-header nav:first-of-type {
+  margin-left: auto;
+}
+
+.site-header .lang-switch {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0;
+  margin-left: 0.15rem;
+  padding-left: 0.85rem;
+  border-left: 1px solid var(--line);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+}
+
+.site-header .lang-switch a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 44px;
+  padding: 0 0.15rem;
+  color: var(--muted);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.site-header .lang-switch a::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+}
+
+.site-header .lang-switch a:hover,
+.site-header .lang-switch a[aria-current="page"] {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.site-header .lang-switch a[aria-current="page"] {
+  font-weight: 600;
 }
 
 .hero {
@@ -165,7 +218,9 @@ a:hover {
   line-height: 1.3;
   text-align: center;
   pointer-events: none;
-  white-space: nowrap;
+  width: max-content;
+  max-width: calc(100% - 1rem);
+  text-wrap: balance;
 }
 .stage-hint[hidden],
 .stage-hint[data-state="running"],
@@ -647,6 +702,47 @@ a:hover {
   }
 }
 
+@media (max-width: 40rem) {
+  /* Phones: wordmark and EN ES PT share the top row, site links go
+     underneath. Same for every language. */
+  .site-header {
+    /* The 44px code overlays reach ~11px below the letters; this keeps them
+       clear of the second-row site links (no ambiguous tap points). */
+    row-gap: 0.75rem;
+  }
+
+  .site-header .lang-switch {
+    order: 1;
+    margin-left: auto;
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .site-header nav:first-of-type {
+    order: 2;
+    flex-basis: 100%;
+    gap: 0.5rem 1rem;
+    margin-left: 0;
+  }
+
+  .toolbar-actions {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 360px) {
+  /* ES/PT: keep the high-score line on one line and the three site links
+     on one row at 320px. */
+  :root:not(:lang(en)) .score-line {
+    font-size: 0.78rem;
+  }
+
+  .site-header--wrap nav:first-of-type {
+    gap: 0.4rem 0.45rem;
+    font-size: 0.8rem;
+  }
+}
+
 @media (orientation: landscape) and (max-height: 500px) {
   .site-header {
     padding: 0.35rem 1rem;
@@ -719,6 +815,10 @@ a:hover {
   box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04);
 }
 
+body.has-consent-banner {
+  padding-bottom: var(--consent-h, 0px);
+}
+
 #consent-banner[hidden] {
   display: none !important;
 }
@@ -733,10 +833,15 @@ a:hover {
   margin: 0;
   flex: 1 1 16rem;
   max-width: 40rem;
+  /* With very large text the copy scrolls inside the banner, so the banner
+     never grows over the header and the buttons stay on screen. */
+  max-height: min(40dvh, var(--consent-p-max, 40dvh));
+  overflow-y: auto;
 }
 
 .consent-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.4rem;
 }
 
@@ -775,5 +880,50 @@ a:hover {
 
   #consent-banner button {
     min-height: 44px;
+  }
+
+  /* Keep the banner to one row (text beside the buttons) so it stays short. */
+  #consent-banner {
+    flex-wrap: nowrap;
+  }
+
+  #consent-banner p {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .consent-actions {
+    flex-wrap: nowrap;
+  }
+
+  /* The banner sits at the top here, so push the page (header included)
+     down below it instead of covering the header and switcher, and shrink
+     the stage by the same amount so the dino and ground stay in view. */
+  body.has-consent-banner {
+    padding-top: var(--consent-h, 0px);
+    padding-bottom: 0;
+  }
+
+  body.has-consent-banner #game-stage {
+    max-height: calc(100dvh - 7.5rem - var(--consent-h, 0px));
+    height: min(calc(100dvh - 7.5rem - var(--consent-h, 0px)), 25vw);
+  }
+}
+
+/* Touch screens: 44px targets for the game buttons and footer links. */
+@media (pointer: coarse) {
+  .toolbar button,
+  #exit-fullscreen {
+    min-height: 44px;
+  }
+
+  .footer-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .footer-links {
+    row-gap: 0;
   }
 }
