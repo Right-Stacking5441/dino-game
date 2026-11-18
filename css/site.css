@@ -513,6 +513,685 @@ a:hover {
   font-size: 0.9rem;
 }
 
+/* Top 10 board (UI/UX spec 18 Nov 2026). The section only shows when the
+   build switched the leaderboard on (meta dino-leaderboard-api), so pages
+   without it look exactly as before. Its body reserves the full board's
+   height before anything loads, so filling it never shifts the page. */
+.board {
+  display: none;
+}
+
+html:has(meta[name="dino-leaderboard-api"]) .board {
+  display: block;
+}
+
+.board-only {
+  display: none;
+}
+
+html:has(meta[name="dino-leaderboard-api"]) p.board-only {
+  display: block;
+}
+
+html:has(meta[name="dino-leaderboard-api"]) li.board-only {
+  display: list-item;
+}
+
+/* Sit the board close under the device score, then let How to play follow
+   at a normal section gap rather than the old 4.5rem hero-to-article jump. */
+.board .visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.board-head,
+.board-meta,
+.board-body {
+  position: relative;
+}
+
+html:has(meta[name="dino-leaderboard-api"]) .board {
+  max-width: var(--stage-max);
+  margin: 0 auto;
+  padding: 1.35rem 1.25rem 0.15rem;
+}
+
+.board-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 1rem;
+  max-width: var(--max);
+}
+
+.board h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+/* Typographic period switch, same idea as the EN ES PT row:
+   quiet type, a hairline between the two, current in weight not colour alone.
+   44px targets from the padded height, not from a pill. */
+.board-switch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-inline-start: auto;
+  max-width: 100%;
+}
+
+.board-switch button {
+  appearance: none;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0 0.7rem;
+  min-height: 44px;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.9rem;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.board-switch button + button {
+  border-left: 1px solid var(--line);
+}
+
+.board-switch button[aria-pressed="true"] {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.board-switch button:hover {
+  color: var(--text);
+}
+
+.board-switch button:focus-visible,
+.entry input:focus-visible,
+.entry-post:focus-visible,
+.entry-skip:focus-visible,
+.board-retry:focus-visible,
+.board-row:focus-visible,
+.place:focus-visible {
+  outline: 2px solid #1b1b19;
+  outline-offset: 2px;
+}
+
+.board-meta {
+  margin: 0.1rem 0 0;
+  max-width: var(--max);
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+/* Qualifying name entry: in the page flow under the stage, never a modal
+   and never over the canvas, so Space/tap on the game still restarts. */
+.entry {
+  max-width: var(--max);
+  margin: 1rem 0 0.25rem;
+  padding: 0.85rem 0 0.15rem;
+  border-top: 1px solid var(--line);
+}
+
+.entry-title {
+  margin: 0 0 0.55rem;
+  font-size: 1.05rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.entry-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.55rem;
+}
+
+.entry-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.35rem;
+}
+
+.entry input {
+  flex: 1 1 100%;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--text);
+  font: inherit;
+  font-size: 1rem;
+}
+
+@media (min-width: 40rem) {
+  .entry input {
+    flex: 1 1 12rem;
+    width: auto;
+    max-width: 22rem;
+  }
+}
+
+.entry input:hover {
+  border-color: #b9b9b2;
+}
+
+.entry-post,
+.board-retry {
+  appearance: none;
+  min-height: 44px;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.entry-post:hover,
+.board-retry:hover {
+  border-color: #b9b9b2;
+}
+
+.entry-skip {
+  appearance: none;
+  min-height: 44px;
+  padding: 0.45rem 0.55rem;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.entry-skip:hover {
+  color: var(--text);
+}
+
+.entry-hint,
+.entry-error {
+  margin: 0.45rem 0 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.entry-error {
+  color: var(--text);
+}
+
+/* Podium: source order is 1, 2, 3. Visual order is 2, 1, 3. */
+.podium-wrap {
+  position: relative;
+  max-width: var(--max);
+  margin: 1rem 0 0.85rem;
+}
+
+.podium,
+.podium-steps {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.18fr) minmax(0, 1fr);
+  grid-template-areas: "p2 p1 p3";
+  column-gap: 0.4rem;
+  align-items: end;
+}
+
+.podium {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.place--1 { grid-area: p1; padding-bottom: 56px; }
+.place--2 { grid-area: p2; padding-bottom: 36px; }
+.place--3 { grid-area: p3; padding-bottom: 24px; }
+
+.place {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  text-align: center;
+}
+
+.place-dino {
+  display: block;
+  width: 32px;
+  height: 34px;
+  margin: 0.2rem 0 -2px;
+  object-fit: contain;
+  object-position: bottom center;
+  image-rendering: pixelated;
+  position: relative;
+  z-index: 2;
+}
+
+.place-name {
+  display: block;
+  max-width: 100%;
+  padding: 0 0.2rem;
+  overflow: hidden;
+  font-size: 0.82rem;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.place-score {
+  display: block;
+  margin: 0.08rem 0 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.place-you {
+  display: block;
+  margin: 0.05rem 0 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.place--you .place-name {
+  font-weight: 600;
+}
+
+.podium-steps {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.step {
+  position: relative;
+  width: 100%;
+  background: var(--game-bg);
+}
+
+.step--1 { grid-area: p1; height: 56px; }
+.step--2 { grid-area: p2; height: 36px; }
+.step--3 { grid-area: p3; height: 24px; }
+
+/* Each place is a short stretch of the game's own horizon, at three
+   heights. No side bars and no medal colours: just the pixel ground
+   line and the dust under it. */
+.step::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 12px;
+  background: url("../assets/leaderboard/horizon.png") repeat-x 0 0 / 600px 12px;
+  image-rendering: pixelated;
+}
+
+.step-rank {
+  position: absolute;
+  right: 0;
+  bottom: 1px;
+  left: 0;
+  color: #535353;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-align: center;
+}
+
+/* Places 4 to 10: a typeset list, not a table and not a stack of cards. */
+.board-list {
+  max-width: var(--max);
+  margin: 0.55rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.board-row {
+  display: grid;
+  grid-template-columns: 1.85rem minmax(0, 1fr) auto;
+  column-gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.42rem 0 0.4rem;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.board-row:last-child {
+  border-bottom: 0;
+}
+
+.board-rank {
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+  text-align: right;
+}
+
+.board-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.board-you-tag {
+  margin-left: 0.4rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.board-score {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.board-row--you {
+  font-weight: 600;
+  box-shadow: inset 2px 0 0 #535353;
+  padding-left: 0.7rem;
+  margin-left: -0.7rem;
+}
+
+.board-message {
+  max-width: var(--max);
+  margin: 1rem 0 0.25rem;
+}
+
+.board-message p {
+  margin: 0 0 0.65rem;
+  color: var(--muted);
+  max-width: 28rem;
+}
+
+.board-message p:first-child {
+  color: var(--text);
+}
+
+/* Tighten the article so How to play follows the board, not a wide empty band. */
+html:has(meta[name="dino-leaderboard-api"]) .article {
+  padding-top: 2.15rem;
+}
+
+.article .board-note {
+  margin-top: 0.7rem;
+}
+
+/* iPhone keyboard: JS sets --kb-pad from visualViewport so the field
+   stays in view without covering the canvas with a fixed sheet. */
+.entry-anchor {
+  scroll-margin-bottom: var(--kb-pad, 0px);
+}
+
+@media (max-width: 24.99rem) {
+  .place-dino {
+    width: 28px;
+    height: 30px;
+  }
+
+  .place--1 { padding-bottom: 56px; }
+  .step--1 { height: 56px; }
+  .place--2 { padding-bottom: 36px; }
+  .step--2 { height: 36px; }
+  .place--3 { padding-bottom: 24px; }
+  .step--3 { height: 24px; }
+
+  .board-row {
+    column-gap: 0.55rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 40rem) {
+  .place-dino {
+    width: 40px;
+    height: 43px;
+  }
+
+  .place--1 { padding-bottom: 64px; }
+  .step--1 { height: 64px; }
+  .place--2 { padding-bottom: 42px; }
+  .step--2 { height: 42px; }
+  .place--3 { padding-bottom: 28px; }
+  .step--3 { height: 28px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entry,
+  .board-row,
+  .place {
+    transition: none;
+  }
+}
+
+
+.board-meta {
+  min-height: 1.4em;
+}
+
+.board-msg:empty {
+  display: none;
+}
+
+.board-msg:not(.visually-hidden) {
+  position: static;
+}
+
+.board-msg {
+  max-width: var(--max);
+  margin: 0.6rem 0 0;
+  font-size: 0.9rem;
+}
+
+/* Reserved: podium plus seven rows, so loading, empty and error states and
+   the filled board all take the same room. */
+.board-body {
+  display: flow-root; /* children's margins stay inside the reserved box */
+  min-height: var(--board-h, 25.5rem);
+}
+
+.entry-notice {
+  margin: 0 0 0.6rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  max-width: 34rem;
+}
+
+.entry-notice a {
+  color: inherit;
+}
+
+.board-name {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  min-width: 0;
+  overflow: visible;
+}
+
+.board-name-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.board-you-tag {
+  margin-left: 0;
+  flex: none;
+}
+
+/* Report and Remove: quiet text links. On mouse and keyboard, Report shows
+   on hover or focus; on touch it is always there with a 44px hit area. */
+.board-report,
+.board-remove,
+.board-confirm button {
+  appearance: none;
+  position: relative;
+  flex: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 400;
+  line-height: 1.2;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.board-report:hover,
+.board-remove:hover,
+.board-confirm button:hover {
+  color: var(--text);
+}
+
+.board-report:focus-visible,
+.board-remove:focus-visible,
+.board-confirm button:focus-visible {
+  outline: 2px solid #1b1b19;
+  outline-offset: 2px;
+}
+
+.board-report.is-done {
+  text-decoration: none;
+  cursor: default;
+}
+
+.board-report::before,
+.board-remove::before,
+.board-confirm button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 44px);
+  height: 44px;
+  transform: translate(-50%, -50%);
+}
+
+.board-report {
+  opacity: 0;
+}
+
+.board-row:hover .board-report,
+.place:hover .board-report,
+.board-report:focus-visible,
+.board-report.is-done {
+  opacity: 1;
+}
+
+.place-score-line {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.place-report {
+  margin-top: 0.1rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .place-score-line {
+    display: inline-block;
+  }
+
+  .place-report {
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    margin: 0 0 0 0.45rem;
+    transform: translateY(-50%);
+  }
+
+  .place-report::before {
+    transform: translate(-50%, -50%);
+  }
+}
+
+.board-confirm {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0 0.55rem;
+  align-items: baseline;
+  font-size: 0.78rem;
+  font-weight: 400;
+}
+
+.board-row > .board-confirm {
+  grid-column: 2 / -1;
+  padding-top: 0.15rem;
+}
+
+.place > .board-confirm {
+  justify-content: center;
+  margin-top: 0.1rem;
+}
+
+.board-confirm-q {
+  color: var(--text);
+}
+
+.place-you .board-remove-wrap {
+  margin-left: 0.25rem;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .board-report {
+    opacity: 1;
+  }
+}
+
+@media (min-width: 40rem) {
+  .board-body {
+    min-height: var(--board-h, 27rem);
+  }
+}
+
 /* When an ad is approved, drop .ad-slot--empty so the reserved 90px slot
    appears from the first paint (no late JS show, no CLS). */
 .ad-slot {

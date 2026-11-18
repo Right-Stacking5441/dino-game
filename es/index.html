@@ -16,6 +16,7 @@
   <link rel="icon" type="image/png" href="/assets/favicon.png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="dino-leaderboard-api" content="https://dino-leaderboard-preview.william-hurrell.workers.dev">
   <meta name="theme-color" content="#fafaf8">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_LA">
@@ -175,6 +176,63 @@
     "text": "Este sitio solo usa Google Analytics si lo aceptas, y no se guarda ninguna cookie de analítica hasta que elijas una opción. Más información en la \u003ca href=\"/privacy/\">página de privacidad\u003c/a> o en la \u003ca href=\"#cookie-settings\">configuración de cookies\u003c/a>.",
     "accept": "Aceptar",
     "reject": "Rechazar"
+  },
+  "leaderboard": {
+    "heading": "Los 10 mejores",
+    "periodGroup": "Periodo del tablero",
+    "today": "Hoy",
+    "allTime": "De siempre",
+    "allTimeMeta": "Mejores puntuaciones públicas hasta ahora",
+    "countdown": "Nuevo tablero en {time}",
+    "countdownShort": "{h} h {m} min",
+    "countdownMinutes": "{m} min",
+    "hour": "hora",
+    "hours": "horas",
+    "minute": "minuto",
+    "minutes": "minutos",
+    "and": " y ",
+    "you": "tú",
+    "qualifyToday": "Entraste en el top 10 de hoy",
+    "qualifyAll": "Entraste en el top 10 de siempre",
+    "qualifyBoth": "Entraste en el top 10 de hoy y en el de siempre",
+    "nameLabel": "Tu nombre",
+    "post": "Publicar",
+    "skip": "Ahora no",
+    "hint": "De 2 a 16 caracteres. Solo letras, números, espacios, - y _.",
+    "errChars": "Solo letras, números, espacios, - y _",
+    "errLength": "De 2 a 16 caracteres",
+    "errBlocked": "Prueba otro nombre",
+    "notice": "Si añades tu puntuación a la clasificación, tu apodo se mostrará públicamente; no uses tu nombre real.",
+    "privacyLink": "Cómo lo usamos",
+    "savedToday": "Guardado como {name}, {nth} de hoy.",
+    "savedAll": "Guardado como {name}, {nth} de siempre.",
+    "newBest": "Nuevo récord, sigues en {nth} lugar",
+    "emptyToday": "Aún no hay puntuaciones en el tablero de hoy",
+    "emptyAll": "Aún no hay puntuaciones de siempre",
+    "emptyBody": "Si una partida entra en el top 10, puedes poner un nombre. No hace falta cuenta.",
+    "loadingToday": "Cargando el top 10 de hoy",
+    "loadingAll": "Cargando el top 10 de siempre",
+    "errorTitle": "No se pudo cargar el tablero",
+    "offlineTitle": "Estás sin conexión, así que no se puede abrir el tablero público",
+    "deviceSaved": "Tu récord en este dispositivo sigue guardado.",
+    "tryAgain": "Reintentar",
+    "report": "Denunciar",
+    "reported": "Denunciado, gracias",
+    "reportLabel": "Denunciar a {name}",
+    "remove": "Quitar",
+    "removeConfirm": "¿Quitar tu puntuación?",
+    "yes": "Sí",
+    "no": "No",
+    "removed": "Hemos quitado tu puntuación.",
+    "postFailed": "No se pudo publicar ahora. Tu récord en este dispositivo sigue guardado.",
+    "tokenError": "Esta partida no se puede publicar. La próxima, sí.",
+    "rateError": "Demasiados intentos. Espera un minuto.",
+    "ordinal": "dot",
+    "thousands": ".",
+    "howToPlayNote": "Si una partida entra en el top 10 del día, puedes poner un nombre en el tablero. No hace falta cuenta.",
+    "faqEnd": "En esta página también hay un top 10 público no oficial, pero el récord de este dispositivo es el que siempre se queda contigo.",
+    "faqRecord": "El top 10 de este sitio es nuestro: no es oficial ni está a prueba de trampas.",
+    "footerLink": "Los 10 mejores"
   }
 }
   </script>
@@ -223,12 +281,27 @@
       <p class="score-line" id="high-score-label">Récord en este dispositivo: todavía ninguno</p>
     </div>
 
+    <section class="board" id="top10" aria-labelledby="top10-title">
+      <div class="board-head">
+        <h2 id="top10-title">Los 10 mejores</h2>
+        <div class="board-switch" role="group" aria-label="Periodo del tablero">
+          <button type="button" data-period="today" aria-pressed="true">Hoy</button>
+          <button type="button" data-period="all" aria-pressed="false">De siempre</button>
+        </div>
+      </div>
+      <p class="board-meta" id="board-meta"></p>
+      <div class="board-entry-slot" id="board-entry-slot"></div>
+      <p class="board-msg" id="board-msg" role="status" aria-live="polite"></p>
+      <div class="board-body" id="board-body" data-state="idle"></div>
+    </section>
+
     <article class="article" id="article">
       <h2>Cómo se juega</h2>
       <p>El juego del dinosaurio es una carrera que no se acaba nunca. El T-Rex corre por un desierto gris: en cuanto empiezas, el suelo se pone en movimiento y los cactus van apareciendo por la derecha. Un poco más adelante llegan también los pterodáctilos. La partida termina cuando chocas con algo. El número de arriba a la derecha marca la distancia que llevas recorrida.</p>
       <p>Si juegas con teclado, presiona Espacio o la flecha hacia arriba (o haz clic en el juego) para empezar y para saltar. Si mantienes la tecla presionada, el dinosaurio salta lo más alto que puede, justo lo que hace falta para pasar un grupo de cactus grandes. Si la sueltas justo después de despegar, el salto sale más corto, suficiente para un cactus pequeño. Con la flecha hacia abajo se agacha y, si la presionas en el aire, cae más rápido. Cuando chocas, con Enter vuelves a jugar al momento. Espacio y la flecha hacia arriba también sirven, pero después de una pequeña pausa. Y también puedes hacer clic en el juego.</p>
       <p>En el teléfono o en la tablet, toca el juego para empezar y para saltar. En pantalla táctil el dinosaurio no puede agacharse; para eso necesitas teclado. Pon la pantalla en horizontal para ver mejor lo que viene.</p>
       <p>No hace falta registrarse y no hay ningún anuncio antes de jugar. Silenciar quita el sonido y Pantalla completa hace que el juego ocupe toda la pantalla. El navegador se acuerda de tu récord y de si dejaste el sonido silenciado.</p>
+      <p class="board-only board-note">Si una partida entra en el top 10 del día, puedes poner un nombre en el tablero. No hace falta cuenta.</p>
 
       <h2>Consejos para llegar más lejos</h2>
       <p>No mires al dinosaurio: fíjate en el lado derecho del desierto. Calculas mucho mejor el salto si ves venir los obstáculos que si estás pendiente de las patas del T-Rex. A máxima velocidad, casi todos los choques vienen de saltar tarde.</p>
@@ -246,10 +319,12 @@
       <p>Escribe <span class="kbd">chrome://dino</span> en la barra de direcciones de Chrome, o juega directamente en la página que sale cuando no hay conexión. Esa dirección funciona aunque estés conectado.</p>
       <h3>¿Tiene final?</h3>
       <p>No. No hay meta: la partida solo se acaba cuando chocas con algo. Quizá hayas oído hablar de los “17 millones de años”, pero es un guiño al tiempo que existió el T-Rex, no un final de verdad. El único reto es batir tu propio récord.</p>
+      <p class="board-only">En esta página también hay un top 10 público no oficial, pero el récord de este dispositivo es el que siempre se queda contigo.</p>
       <h3>¿Qué pasa si llegas a 99999?</h3>
       <p>El marcador pasa a seis cifras y la partida sigue. Según nuestros cálculos con el código de Chrome, llegar a 99999 lleva unos 90 minutos sin chocar ni una vez.</p>
       <h3>¿Hay un récord mundial oficial?</h3>
       <p>Que sepamos, no. Google no publica ninguna clasificación ni récords oficiales, y es muy fácil hacer trampa o usar bots, así que no te fíes de las puntuaciones enormes que circulan por internet.</p>
+      <p class="board-only">El top 10 de este sitio es nuestro: no es oficial ni está a prueba de trampas.</p>
       <h3>¿Por qué mi Chromebook dice que el propietario ha desactivado el juego?</h3>
       <p>Algunos Chromebooks administrados ocultan el juego mediante una política de administrador llamada AllowDinosaurEasterEgg. Eso solo afecta al juego que viene con Chrome en ese dispositivo. Este sitio sigue funcionando en un navegador normal.</p>
       <h3>¿Se puede ver el código fuente?</h3>
@@ -264,6 +339,7 @@
       <li><a href="/license/">Licencia</a></li>
       <li><a href="/privacy/">Privacidad</a></li>
       <li><a href="#faq">Preguntas frecuentes</a></li>
+      <li class="board-only"><a href="#top10">Los 10 mejores</a></li>
       <li><a href="#cookie-settings">Configuración de cookies</a></li>
     </ul>
   </footer>
