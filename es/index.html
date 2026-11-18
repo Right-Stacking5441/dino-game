@@ -16,7 +16,7 @@
   <link rel="icon" type="image/png" href="/assets/favicon.png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
-  <meta name="dino-leaderboard-api" content="https://dino-leaderboard-preview.william-hurrell.workers.dev">
+  <meta name="dino-leaderboard-api" content="https://dino-leaderboard-preview.dinogame.workers.dev">
   <meta name="theme-color" content="#fafaf8">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_LA">
@@ -122,7 +122,7 @@
             "name": "¿Qué pasa si llegas a 99999?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "El marcador pasa a seis cifras y la partida sigue. Según nuestros cálculos con el código de Chrome, llegar a 99999 lleva unos 90 minutos sin chocar ni una vez."
+              "text": "El marcador pasa a seis cifras y la partida sigue. Según nuestros cálculos con el código de Chrome, llegar a 99999 lleva unos 90 minutos sin chocar ni una vez. Nuestro top 10 solo admite puntuaciones de hasta 99999."
             }
           },
           {
@@ -179,10 +179,10 @@
   },
   "leaderboard": {
     "heading": "Los 10 mejores",
-    "periodGroup": "Periodo del tablero",
+    "periodGroup": "Periodo de la clasificación",
     "today": "Hoy",
-    "allTime": "De siempre",
-    "countdown": "Nuevo tablero en {time}",
+    "allTime": "Histórico",
+    "countdown": "Se reinicia en {time}",
     "countdownShort": "{h} h {m} min",
     "countdownMinutes": "en {m} min",
     "hour": "hora",
@@ -191,41 +191,52 @@
     "minutes": "minutos",
     "and": " ",
     "you": "tú",
-    "qualifyToday": "Entraste en el top 10",
-    "qualifyAll": "Entraste en el top 10 de siempre",
+    "qualifyToday": "¡Estás en el top 10 de hoy!",
+    "qualifyAll": "¡Estás en el top 10 histórico!",
     "nameLabel": "Tu nombre",
-    "publicLine": "Se muestra públicamente. No uses tu nombre real.",
+    "publicLine": "Lo verá todo el mundo. No pongas tu nombre real.",
     "post": "Publicar",
     "skip": "Ahora no",
     "hint": "Solo letras, números, espacios, - y _",
     "errChars": "Solo letras, números, espacios, - y _",
-    "errLength": "De 2 a 16 caracteres",
+    "errLength": "Entre 2 y 16 caracteres",
     "errBlocked": "Prueba otro nombre",
     "privacyLink": "Los nombres son públicos",
-    "savedToday": "Guardado, {nth} de hoy.",
-    "savedAll": "Guardado, {nth} de siempre.",
-    "newBest": "Nuevo récord, sigues en el {nth}",
+    "savedToday": "Guardado. Estás en el {nth} puesto de hoy.",
+    "savedAll": "Guardado. Estás en el {nth} puesto del histórico.",
+    "newBest": "Nuevo récord. Sigues en el {nth} puesto.",
     "empty": "Aún no hay puntuaciones",
-    "loading": "Cargando",
-    "errorTitle": "No se pudo cargar el tablero",
+    "loading": "Cargando…",
+    "errorTitle": "No se pudo cargar la clasificación",
     "offlineTitle": "Estás sin conexión",
     "tryAgain": "Reintentar",
-    "report": "Denunciar",
-    "reported": "Denunciado, gracias",
-    "remove": "Quitar",
-    "removeConfirm": "¿Quitar tu puntuación?",
+    "report": "Reportar",
+    "reported": "Reportado, gracias",
+    "remove": "Borrar",
+    "removeConfirm": "¿Borrar tu puntuación?",
     "yes": "Sí",
     "no": "No",
-    "removed": "Hemos quitado tu puntuación.",
-    "postFailed": "No se pudo publicar ahora.",
-    "tokenError": "Esta partida no se puede publicar. La próxima, sí.",
+    "removed": "Listo, hemos borrado tu puntuación.",
+    "postFailed": "No se pudo publicar. Inténtalo otra vez.",
+    "tokenError": "Esta partida no se puede publicar, pero la siguiente sí.",
     "rateError": "Demasiados intentos. Espera un minuto.",
     "ordinal": "dot",
-    "thousands": ".",
-    "howToPlayNote": "Una partida del top 10 puede salir en el tablero, solo con un nombre.",
-    "faqEnd": "En esta página también hay un top 10 público no oficial, pero el récord de este dispositivo es el que siempre se queda contigo.",
-    "faqRecord": "El top 10 de este sitio es nuestro: no es oficial ni está a prueba de trampas.",
-    "footerLink": "Los 10 mejores"
+    "thousands": " ",
+    "howToPlayNote": "Si entras en el top 10, puedes publicar tu partida en la clasificación. Solo te pedimos un nombre.",
+    "faqEnd": "En esta página también hay un top 10 público y no oficial, pero tu récord en este dispositivo siempre es tuyo.",
+    "faqRecord": "El top 10 de esta página es cosa nuestra: no es oficial y no podemos garantizar que nadie haga trampas.",
+    "footerLink": "Los 10 mejores",
+    "saved": "Guardado.",
+    "newBestPlain": "Nuevo récord.",
+    "overCap": "La clasificación solo llega hasta 99 999, así que esta partida no se puede publicar.",
+    "faqCap": "Nuestro top 10 solo admite puntuaciones de hasta 99999.",
+    "setName": "Nombre",
+    "saveName": "Guardar",
+    "cancelName": "Cancelar",
+    "changeName": "Tu nombre",
+    "reportConfirm": "¿Reportar este nombre?",
+    "reportFailed": "No se pudo enviar el reporte. Inténtalo otra vez.",
+    "removeFailed": "No se pudo borrar. Inténtalo otra vez."
   }
 }
   </script>
@@ -253,6 +264,7 @@
       <p class="dek">El pequeño T-Rex que te sale en Chrome cuando te quedas sin internet. Aquí puedes jugar sin desconectarte.</p>
       <div class="toolbar">
         <div class="toolbar-actions">
+          <button type="button" class="name-control board-only" id="name-control" aria-expanded="false" aria-controls="board-entry-slot" data-change="Tu nombre" data-set="Nombre"><span class="name-control-label">Nombre</span></button><script>(function(){try{var n=localStorage.getItem('dino.game.leaderboardName'),b=document.getElementById('name-control');if(n&&b){b.firstChild.textContent=n;b.setAttribute('aria-label',b.getAttribute('data-change')+', '+n);}}catch(e){}})();</script>
           <button type="button" id="mute-button" aria-pressed="false">Silenciar</button>
           <button type="button" id="fullscreen-button" aria-pressed="false">Pantalla completa</button>
         </div>
@@ -278,19 +290,30 @@
       <h2 class="visually-hidden" id="top10-title">Los 10 mejores</h2>
       <p class="visually-hidden" id="board-msg" role="status" aria-live="polite" aria-atomic="true"></p>
       <div class="entry-anchor" id="board-entry-slot"></div>
-      <div class="pixel-frame board-panel">
-        <div class="pixel-inner">
-          <div class="board-head">
-            <div class="board-switch" role="group" aria-label="Periodo del tablero">
-              <button type="button" data-period="today" aria-pressed="true">Hoy</button>
-              <button type="button" data-period="all" aria-pressed="false">De siempre</button>
+      <div class="board-columns">
+        <div class="pixel-frame board-panel" data-col="today">
+          <div class="pixel-inner">
+            <div class="board-head">
+              <div class="board-switch" role="group" aria-label="Periodo de la clasificación">
+                <button type="button" data-period="today" aria-pressed="true">Hoy</button>
+                <button type="button" data-period="all" aria-pressed="false">Histórico</button>
+              </div>
+              <h3 class="board-period-title">Hoy</h3>
+              <p class="board-count" id="board-meta"></p>
             </div>
-            <p class="board-count" id="board-meta"></p>
+            <div class="board-body" id="board-body" data-state="idle"></div>
           </div>
-          <div class="board-body" id="board-body" data-state="idle"></div>
-          <p class="board-foot"><a href="/privacy/#leaderboard">Los nombres son públicos</a></p>
+        </div>
+        <div class="pixel-frame board-panel board-panel--all" data-col="all">
+          <div class="pixel-inner">
+            <div class="board-head">
+              <h3 class="board-period-title">Histórico</h3>
+            </div>
+            <div class="board-body" id="board-body-all" data-state="idle"></div>
+          </div>
         </div>
       </div>
+      <p class="board-foot"><a href="/privacy/#leaderboard">Los nombres son públicos</a></p>
     </section>
 
     <article class="article" id="article">
@@ -299,7 +322,7 @@
       <p>Si juegas con teclado, presiona Espacio o la flecha hacia arriba (o haz clic en el juego) para empezar y para saltar. Si mantienes la tecla presionada, el dinosaurio salta lo más alto que puede, justo lo que hace falta para pasar un grupo de cactus grandes. Si la sueltas justo después de despegar, el salto sale más corto, suficiente para un cactus pequeño. Con la flecha hacia abajo se agacha y, si la presionas en el aire, cae más rápido. Cuando chocas, con Enter vuelves a jugar al momento. Espacio y la flecha hacia arriba también sirven, pero después de una pequeña pausa. Y también puedes hacer clic en el juego.</p>
       <p>En el teléfono o en la tablet, toca el juego para empezar y para saltar. En pantalla táctil el dinosaurio no puede agacharse; para eso necesitas teclado. Pon la pantalla en horizontal para ver mejor lo que viene.</p>
       <p>No hace falta registrarse y no hay ningún anuncio antes de jugar. Silenciar quita el sonido y Pantalla completa hace que el juego ocupe toda la pantalla. El navegador se acuerda de tu récord y de si dejaste el sonido silenciado.</p>
-      <p class="board-only board-note">Una partida del top 10 puede salir en el tablero, solo con un nombre.</p>
+      <p class="board-only board-note">Si entras en el top 10, puedes publicar tu partida en la clasificación. Solo te pedimos un nombre.</p>
 
       <h2>Consejos para llegar más lejos</h2>
       <p>No mires al dinosaurio: fíjate en el lado derecho del desierto. Calculas mucho mejor el salto si ves venir los obstáculos que si estás pendiente de las patas del T-Rex. A máxima velocidad, casi todos los choques vienen de saltar tarde.</p>
@@ -317,12 +340,13 @@
       <p>Escribe <span class="kbd">chrome://dino</span> en la barra de direcciones de Chrome, o juega directamente en la página que sale cuando no hay conexión. Esa dirección funciona aunque estés conectado.</p>
       <h3>¿Tiene final?</h3>
       <p>No. No hay meta: la partida solo se acaba cuando chocas con algo. Quizá hayas oído hablar de los “17 millones de años”, pero es un guiño al tiempo que existió el T-Rex, no un final de verdad. El único reto es batir tu propio récord.</p>
-      <p class="board-only">En esta página también hay un top 10 público no oficial, pero el récord de este dispositivo es el que siempre se queda contigo.</p>
+      <p class="board-only">En esta página también hay un top 10 público y no oficial, pero tu récord en este dispositivo siempre es tuyo.</p>
       <h3>¿Qué pasa si llegas a 99999?</h3>
       <p>El marcador pasa a seis cifras y la partida sigue. Según nuestros cálculos con el código de Chrome, llegar a 99999 lleva unos 90 minutos sin chocar ni una vez.</p>
+      <p class="board-only">Nuestro top 10 solo admite puntuaciones de hasta 99999.</p>
       <h3>¿Hay un récord mundial oficial?</h3>
       <p>Que sepamos, no. Google no publica ninguna clasificación ni récords oficiales, y es muy fácil hacer trampa o usar bots, así que no te fíes de las puntuaciones enormes que circulan por internet.</p>
-      <p class="board-only">El top 10 de este sitio es nuestro: no es oficial ni está a prueba de trampas.</p>
+      <p class="board-only">El top 10 de esta página es cosa nuestra: no es oficial y no podemos garantizar que nadie haga trampas.</p>
       <h3>¿Por qué mi Chromebook dice que el propietario ha desactivado el juego?</h3>
       <p>Algunos Chromebooks administrados ocultan el juego mediante una política de administrador llamada AllowDinosaurEasterEgg. Eso solo afecta al juego que viene con Chrome en ese dispositivo. Este sitio sigue funcionando en un navegador normal.</p>
       <h3>¿Se puede ver el código fuente?</h3>

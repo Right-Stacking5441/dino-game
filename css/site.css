@@ -200,6 +200,8 @@ a:hover {
 
 .toolbar-actions {
   display: flex;
+  flex-wrap: wrap; /* v2.2: Set name + Mute + Fullscreen wrap at 320 ES/PT */
+  justify-content: flex-end;
   gap: 0.4rem;
   margin-inline-start: auto;
 }
@@ -509,11 +511,17 @@ a:hover {
 
 .score-line {
   margin: 0.7rem 0 0;
+}
+
+/* v2.2: tighter under the stage when the board is on, so the whole podium
+   is on the first 390x844 screen. */
+html:has(meta[name="dino-leaderboard-api"]) .hero .score-line {
+  margin-top: 0.35rem;
   color: var(--muted);
   font-size: 0.9rem;
 }
 
-/* Top 10 board, UI/UX v2 (18 Nov 2026, William feedback) + v2.1 touch
+/* Top 10 board, UI/UX v2 (18 Nov 2026, owner feedback) + v2.1 touch
    access. Shows only when the build switched the leaderboard on (meta
    dino-leaderboard-api), so pages without it look exactly as before.
    Tweak points: the tokens just below, podium sizes in the media blocks at
@@ -561,7 +569,7 @@ html:has(meta[name="dino-leaderboard-api"]) .article {
   position: relative;
   max-width: var(--stage-max);
   margin: 0 auto;
-  padding: 1.15rem 1.25rem 0.15rem;
+  padding: 0.4rem 1.25rem 0.15rem; /* v2.2: was 1.15rem on top */
 }
 
 /* Stepped 1px frame: the outer clip is the outline, the 1px padding is the
@@ -806,7 +814,12 @@ html:has(meta[name="dino-leaderboard-api"]) .article {
 /* ---- Podium: the hero. Source order 1, 2, 3; visual order 2, 1, 3. ---- */
 .podium-wrap {
   position: relative;
-  margin: 0.85rem 0 0.35rem;
+  margin: 0.45rem 0 0.35rem; /* v2.2: was 0.85rem on top */
+  /* Step heights (2nd / 1st / 3rd): 390 is the default; px bands below. */
+  --p1: 100px;
+  --p2: 46px;
+  --p3: 46px;
+  --score-gap: 5px; /* 2nd and 3rd sit this far above their step */
 }
 
 .podium,
@@ -833,15 +846,16 @@ html:has(meta[name="dino-leaderboard-api"]) .article {
   min-width: 0;
 }
 
-.place--1 { grid-area: p1; padding-bottom: 80px; align-items: center; text-align: center; }
-.place--2 { grid-area: p2; padding-bottom: 50px; align-items: flex-start; text-align: left; }
-.place--3 { grid-area: p3; padding-bottom: 34px; align-items: flex-end; text-align: right; }
+.place--1 { grid-area: p1; padding-bottom: var(--p1); align-items: center; text-align: center; }
+.place--2 { grid-area: p2; padding-bottom: calc(var(--p2) + var(--score-gap)); align-items: flex-start; text-align: left; }
+.place--3 { grid-area: p3; padding-bottom: calc(var(--p3) + var(--score-gap)); align-items: flex-end; text-align: right; }
 
 .place-dino {
   display: block;
   width: 48px;
   height: 51px;
   margin: 0.25rem 0 -2px;
+  /* 1st's padding equals its step, so the dino stands on the ground. */
   object-fit: contain;
   object-position: bottom center;
   image-rendering: pixelated;
@@ -860,7 +874,9 @@ html:has(meta[name="dino-leaderboard-api"]) .article {
   max-width: 100%;
   padding: 0 0.15rem;
   overflow: hidden;
-  font-size: 0.9rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 400;
   line-height: 1.2;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -871,24 +887,30 @@ html:has(meta[name="dino-leaderboard-api"]) .article {
   margin: 0.08rem 0 0;
   padding: 0 0.15rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 1.15rem;
-  font-weight: 650;
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 400;
   letter-spacing: -0.03em;
   line-height: 1.15;
+  white-space: nowrap; /* a score never wraps mid-number */
 }
 
 .place--1 .place-name {
-  font-size: 1rem;
+  color: var(--text);
+  font-size: 1.15rem;
   font-weight: 650;
 }
 
 .place--1 .place-score {
-  font-size: 1.55rem;
+  color: var(--text);
+  font-size: 1.85rem;
+  font-weight: 650;
   letter-spacing: -0.04em;
 }
 
 .place--you .place-name,
 .place--you .place-score {
+  color: var(--text);
   font-weight: 650;
 }
 
@@ -905,9 +927,9 @@ html:has(meta[name="dino-leaderboard-api"]) .article {
   background: var(--game-bg);
 }
 
-.step--1 { grid-area: p1; height: 80px; }
-.step--2 { grid-area: p2; height: 50px; }
-.step--3 { grid-area: p3; height: 34px; }
+.step--1 { grid-area: p1; height: var(--p1); background: #efefe9; }
+.step--2 { grid-area: p2; height: var(--p2); }
+.step--3 { grid-area: p3; height: var(--p3); }
 
 /* Each place is a stretch of the game's own horizon at three heights. */
 .step::before {
@@ -955,7 +977,7 @@ html:has(meta[name="dino-leaderboard-api"]) .article {
 
 .board-row .row-btn {
   display: grid;
-  grid-template-columns: 1.7rem minmax(0, 1fr) auto;
+  grid-template-columns: 1.7rem minmax(4.5rem, 1fr) max-content;
   column-gap: 0.6rem;
   align-items: center;
   padding: 0.28rem 0 0.26rem;
@@ -1004,9 +1026,9 @@ html:has(meta[name="dino-leaderboard-api"]) .article {
 }
 
 .board-foot {
-  margin: 0.55rem 0 0;
-  padding-top: 0.35rem;
-  border-top: 1px solid var(--line);
+  max-width: var(--max);
+  margin: 0.4rem 0 0;
+  padding: 0 0.15rem;
   color: var(--muted);
   font-size: 0.75rem;
   line-height: 1.35;
@@ -1073,6 +1095,41 @@ html:has(meta[name="dino-leaderboard-api"]) .article {
   font-weight: 400;
 }
 
+/* Report and Remove confirms (Tester B2, B12): the two answers sit apart so
+   their hit areas never overlap. */
+.row-confirm-actions {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0 1.1rem;
+}
+
+.row-confirm-actions .confirm-btn--quiet::before {
+  width: calc(100% + 1rem);
+  min-width: 0;
+}
+
+/* Touch: real 44px targets, no overlay, at least 12px apart. */
+@media (pointer: coarse) {
+  .row-confirm {
+    align-items: center;
+  }
+
+  .row-confirm-actions {
+    align-items: center;
+    gap: 0 0.75rem;
+  }
+
+  .row-confirm-actions .confirm-btn--quiet {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 0.6rem;
+  }
+
+  .row-confirm-actions .confirm-btn--quiet::before {
+    content: none;
+  }
+}
+
 /* Open (tap, click or Enter): the row grows by one line, link under the name. */
 .board-row.is-open .row-reveal,
 .place.is-open .row-reveal {
@@ -1099,31 +1156,36 @@ html:has(meta[name="dino-leaderboard-api"]) .article {
    columns (so names still fit at 200% text). The click toggle stays the
    source of truth. */
 @media (hover: hover) and (pointer: fine) {
+  /* 4 to 10: just left of the score, never over it (UI/UX 13:32). */
   .board-row:not(.is-open):hover .row-reveal,
   .board-row:not(.is-open):focus-within .row-reveal {
     display: block;
     position: absolute;
     top: 50%;
-    right: 0;
+    right: 4.6rem;
     transform: translateY(-50%);
     background: var(--board-fill);
   }
 
+  /* Podium: under the name and score, as in the open state, not on the step. */
   .place:not(.is-open):hover .row-reveal,
   .place:not(.is-open):focus-within .row-reveal {
     display: block;
-    position: absolute;
-    right: 0;
-    bottom: 0.15rem;
-    z-index: 2;
+    position: static;
+    padding: 0.1rem 0 0;
   }
+}
+
+/* Reserved board height in px (UI/UX 13:32), so large text never leaves a
+   huge hole. Measured with a full board (podium plus 7 rows) per band. */
+.board {
+  --board-h: 480px;
 }
 
 /* Touch: full-width rows get a 44px target. */
 @media (pointer: coarse) {
-  /* 7 rows of 44px plus the podium: 523px at 390 (17px root). */
   .board {
-    --board-h: 31rem;
+    --board-h: 552px;
   }
 
   .board-row .row-btn {
@@ -1131,22 +1193,22 @@ html:has(meta[name="dino-leaderboard-api"]) .article {
   }
 }
 
-/* Narrow phones (320 to 383px). 390px phones keep the base sizes (SPEC v2). */
-@media (max-width: 23.99rem) {
-  .place-dino {
-    width: 42px;
-    height: 45px;
-  }
+/* Empty, error and offline need no podium-sized hole (UI/UX 13:32). */
+.board-body[data-state="empty"],
+.board-body[data-state="error"],
+.board-body[data-state="offline"] {
+  min-height: 0;
+}
 
-  .place--1 { padding-bottom: 70px; }
-  .step--1 { height: 70px; }
-  .place--2 { padding-bottom: 44px; }
-  .step--2 { height: 44px; }
-  .place--3 { padding-bottom: 30px; }
-  .step--3 { height: 30px; }
-
-  .place--1 .place-score { font-size: 1.35rem; }
-  .place-score { font-size: 1.05rem; }
+/* ---- v2.2 podium bands, in px so 390 is 390 (SPEC v2.2 table) ---- */
+@media (max-width: 359px) {
+  /* 320 */
+  .podium-wrap { --p1: 76px; --p2: 40px; --p3: 40px; }
+  .place-dino { width: 40px; height: 43px; }
+  .place--1 .place-name { font-size: 1.05rem; }
+  .place--1 .place-score { font-size: 1.7rem; }
+  .place-name { font-size: 0.75rem; }
+  .place-score { font-size: 0.95rem; }
 
   .board-panel .pixel-inner,
   .entry-panel .pixel-inner {
@@ -1155,18 +1217,25 @@ html:has(meta[name="dino-leaderboard-api"]) .article {
   }
 }
 
-@media (min-width: 40rem) {
-  .place-dino {
-    width: 56px;
-    height: 60px;
-  }
+@media (min-width: 360px) and (max-width: 389px) {
+  /* 360 */
+  .podium-wrap { --p1: 88px; --p2: 44px; --p3: 44px; }
+  .place-dino { width: 44px; height: 47px; }
+  .place--1 .place-name { font-size: 1.1rem; }
+  .place--1 .place-score { font-size: 1.8rem; }
+  .place-name { font-size: 0.78rem; }
+  .place-score { font-size: 0.95rem; }
+}
 
-  .place--1 { padding-bottom: 92px; }
-  .step--1 { height: 92px; }
-  .place--2 { padding-bottom: 58px; }
-  .step--2 { height: 58px; }
-  .place--3 { padding-bottom: 38px; }
-  .step--3 { height: 38px; }
+/* 390 is the default above: 46 / 100 / 46, 1st 1.15rem / 1.85rem. */
+
+@media (min-width: 48rem) {
+  .podium-wrap { --p1: 120px; --p2: 52px; --p3: 52px; }
+  .place-dino { width: 56px; height: 60px; }
+  .place--1 .place-name { font-size: 1.2rem; }
+  .place--1 .place-score { font-size: 2.05rem; }
+  .place-name { font-size: 0.82rem; }
+  .place-score { font-size: 1rem; }
 
   .board-panel .pixel-inner {
     padding: 0.2rem 1.15rem 0.85rem;
@@ -1175,6 +1244,92 @@ html:has(meta[name="dino-leaderboard-api"]) .article {
   .entry-panel .pixel-inner {
     padding: 0.9rem 1.15rem 0.85rem;
   }
+}
+
+/* ---- v2.2 desktop: Today and All time side by side, from 48rem, never at
+   large text (html.lb-text-large, set by the game script). ---- */
+.board-columns {
+  max-width: var(--max);
+}
+
+.board-panel--all,
+.board-period-title {
+  display: none;
+}
+
+.board-period-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  line-height: 1;
+}
+
+@media (min-width: 48rem) {
+  html:not(.lb-text-large) .board-columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: start;
+    max-width: none;
+  }
+
+  html:not(.lb-text-large) .board-columns .pixel-frame {
+    max-width: none;
+  }
+
+  html:not(.lb-text-large) .board-panel--all,
+  html:not(.lb-text-large) .board-period-title {
+    display: block;
+  }
+
+  html:not(.lb-text-large) .board-switch {
+    display: none;
+  }
+
+  html:not(.lb-text-large) .board-foot {
+    max-width: none;
+  }
+}
+
+/* ---- Large text (200%): podium scales down so names and scores fit ---- */
+html.lb-text-large .board { --board-h: 640px; }
+html.lb-text-large .podium-wrap { --p1: 72px; --p2: 52px; --p3: 52px; }
+html.lb-text-large .place--1 .place-name { font-size: 0.8rem; }
+html.lb-text-large .place--1 .place-score { font-size: min(1.25rem, 7vw); }
+html.lb-text-large .place-name { font-size: 0.75rem; }
+/* Scores never wrap, so on a phone they are capped by the viewport too:
+   a five-digit score at 200% text otherwise runs into its neighbour. */
+html.lb-text-large .place-score { font-size: min(0.9rem, 5vw); }
+html.lb-text-large .step-rank { font-size: 0.55rem; }
+html.lb-text-large .place-dino { width: 36px; height: 38px; }
+/* The list's name column gives way first at 200% text, so the score never
+   pushes the row sideways; names ellipsise, the full name is in the label. */
+html.lb-text-large .board-row .row-btn { grid-template-columns: 1.7rem minmax(0, 1fr) max-content; }
+/* At 320 with 200% text there is no room for name and score side by side:
+   the score drops under the name so the name keeps the full width. */
+@media (max-width: 359px) {
+  html.lb-text-large .board-row .row-btn { grid-template-columns: 1.7rem minmax(0, 1fr); row-gap: 0; }
+  html.lb-text-large .board-row .board-score { grid-column: 2; }
+}
+
+/* ---- v2.2 toolbar name control: quiet, before Mute ---- */
+.name-control-label {
+  display: inline-block;
+  max-width: 9em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+.name-control[aria-expanded="true"] {
+  border-color: var(--text);
+}
+
+html:has(meta[name="dino-leaderboard-api"]) .toolbar .name-control.board-only {
+  display: inline-flex;
+  align-items: center;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1404,7 +1559,8 @@ html:has(meta[name="dino-leaderboard-api"]) .article {
 @media (max-width: 360px) {
   /* ES/PT: keep the high-score line on one line and the three site links
      on one row at 320px. */
-  :root:not(:lang(en)) .score-line {
+  :root:not(:lang(en)) .score-line,
+  html:not(:lang(en)):has(meta[name="dino-leaderboard-api"]) .hero .score-line {
     font-size: 0.78rem;
   }
 

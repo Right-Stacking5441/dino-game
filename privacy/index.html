@@ -57,7 +57,7 @@
 
     <h2>What is stored on your device</h2>
     <p><strong>Things the game needs.</strong> Your high score, your mute setting and your cookie choice are saved in your browser's local storage on this device. They are used only to run the game and remember your choice. No consent is needed for these because they are strictly necessary for things you've asked for. If you accept analytics, a finished run's score and your high score are included in the measurements described below. Clearing your browser's site data resets them.</p>
-    <p>Leaderboard nickname and removal key, only if you add a score, kept until you clear them.</p>
+    <p>If you save a nickname with Set name or add a score to the leaderboard, your browser saves that nickname. If you add a score, it also saves a removal key. They stay until you clear this site's data.</p>
     <p><strong>Google Analytics cookies (only if you accept).</strong></p>
     <table>
       <thead>
@@ -97,19 +97,19 @@
     <p>You can withdraw consent at any time using the <a href="#cookie-settings"><strong>Cookie settings</strong></a> link at the bottom of every page. That switches analytics off straight away and deletes the Google Analytics cookies this site set. Withdrawing doesn't affect anything measured before you withdrew. You can also block or delete cookies in your browser settings.</p>
 
     <h2 id="leaderboard">The leaderboard</h2>
-    <p>If you choose to add your score to the leaderboard, we store the nickname you enter, your score, and the date and time it was submitted. Nothing goes on the leaderboard unless you submit it.</p>
-    <p>When you start a game, your browser asks our leaderboard server for a one-time game token, so that scores can't be faked. This happens even if you never add a score. To deliver it, Cloudflare sees your IP address and uses it briefly to stop abuse. We don't store your IP address, and Cloudflare handles it as our processor. We do this because we have a legitimate interest in keeping the leaderboard fair and secure (Article 6(1)(f)).</p>
-    <p>Your nickname and score are shown publicly in the daily and all-time top 10. Please don't use your real name or anything that could identify you, such as your surname, school, age, address, email or phone number. We block some words and anything that looks like contact details, and we remove nicknames that break these rules.</p>
-    <p>When you add a score, your browser also remembers the nickname you used and a random key that lets you remove your own scores later. Both are stored only on your device, and you can clear them by clearing this site's data in your browser. If you clear them, you can still ask us to remove a score by email.</p>
-    <p>We use this information because we have a legitimate interest in running a leaderboard that players choose to join (Article 6(1)(f)). We keep it to the minimum the leaderboard needs and don't use it for anything else, including advertising.</p>
+    <p>If you choose to add your score to the leaderboard, we store the nickname you enter, your score, the date and time it was submitted, which language version of the site you were using, and a scrambled (hashed) copy of your removal key so we can check removal requests. Nothing goes on the leaderboard unless you submit it.</p>
+    <p>When you start a game, your browser asks our leaderboard server for a one-time game token, which helps us spot faked scores. This happens even if you never add a score. To deliver it, Cloudflare sees your IP address, and we use it briefly, in memory only, to limit how often requests can be made. We don't store your IP address. Cloudflare is itself responsible for some data about visitors' connections, such as IP addresses, which it uses to run and secure its network, as explained in the <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare Privacy Policy</a>. We do this because we have a legitimate interest in keeping the leaderboard fair and secure (Article 6(1)(f)).</p>
+    <p>Your nickname, score and the date you played are shown publicly in the daily and all-time top 10. Please don't use your real name or anything that could identify you, such as your surname, school, age, address, email or phone number. We block some words and anything that looks like contact details, and we remove nicknames that break these rules.</p>
+    <p>If you save a nickname with Set name, your browser remembers it so it's ready next time. It isn't sent to us until you add a score. When you add a score, your browser also remembers the nickname you used and a random removal key, so you can remove your own scores later. You can clear these from your device by clearing this site's data in your browser. Our server keeps your nickname with your score, but only a scrambled copy of the key. If you clear your browser's copy, you can still ask us to remove a score by email.</p>
+    <p>We use this information because we have a legitimate interest in running a leaderboard that players choose to join (Article 6(1)(f)). We only use it to run the leaderboard, never for advertising.</p>
     <p>Leaderboard entries are stored with Cloudflare, Inc., which runs the leaderboard for us as our processor under its Data Processing Addendum. Cloudflare may process this data in the United States and other countries, protected by its certification under the EU-U.S. Data Privacy Framework and its UK Extension, and by the standard contractual clauses in that addendum.</p>
-    <p>How long we keep it: daily entries are deleted after 30 days unless they make the all-time top 100. All-time entries are kept while they stay in the top 100 and deleted within 30 days of dropping out.</p>
+    <p>How long we keep it: each score is deleted at our daily clean-up once it is more than 30 days old and isn't among the 100 highest scores on the all-time board. Scores in the all-time top 100 are kept while they stay there.</p>
     <p>Removing a score: email <a href="mailto:hello@dino.game">hello@dino.game</a> with the nickname, the score and roughly when you played, and we'll remove it within 7 days. A parent or carer can ask on a child's behalf.</p>
 
     <h2>Who receives your data</h2>
     <ul>
       <li><strong>Google</strong> (Google Ireland Limited for UK and EU visitors, together with Google LLC in the US) provides Google Analytics. It acts as our processor under Google's data processing terms.</li>
-      <li><strong>Cloudflare, Inc.</strong> runs our leaderboard and stores leaderboard entries as our processor under its Data Processing Addendum.</li>
+      <li><strong>Cloudflare, Inc.</strong> runs our leaderboard and stores leaderboard entries as our processor under its Data Processing Addendum. Cloudflare is also responsible itself, as an independent controller, for some data about visitors' connections, such as IP addresses, which it uses to run and secure its network, under the <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare Privacy Policy</a>. We don't receive that data.</li>
       <li><strong>GitHub, Inc.</strong> hosts the site on GitHub Pages. According to <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages">GitHub's documentation</a>, when a GitHub Pages site is visited, the visitor's IP address is logged and stored for security purposes, whether or not the visitor is signed in to GitHub. GitHub handles this data as an independent controller under the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub General Privacy Statement</a>. We don't receive or have access to these logs.</li>
     </ul>
     <p>We don't sell your data or use it to show you personalised ads.</p>
@@ -135,7 +135,7 @@
     <p>If this notice changes, we'll update the date at the top.</p>
   </main>
   <footer class="site-footer">
-    <p>Game based on the Chromium T-Rex runner, © The Chromium Authors, used under a BSD licence. Unofficial; not made or endorsed by Google.</p>
+    <p>Game based on the Chromium T-Rex runner, © The Chromium Authors, used under the <a href="/license/">BSD 3-Clause licence</a>. Unofficial; not made or endorsed by Google.</p>
     <p>Google and Chrome are trademarks of Google LLC.</p>
     <ul class="footer-links">
       <li><a href="/">Play</a></li>

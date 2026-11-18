@@ -15,7 +15,7 @@
   <link rel="icon" type="image/png" href="/assets/favicon.png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
-  <meta name="dino-leaderboard-api" content="https://dino-leaderboard-preview.william-hurrell.workers.dev">
+  <meta name="dino-leaderboard-api" content="https://dino-leaderboard-preview.dinogame.workers.dev">
   <meta name="theme-color" content="#fafaf8">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="en_GB">
@@ -123,7 +123,7 @@
             "name": "What happens after 99,999?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "The counter goes to six digits and the run carries on. By our estimate from Chrome’s code, reaching 99,999 takes roughly 90 minutes of clean play."
+              "text": "The counter goes to six digits and the run carries on. By our estimate from Chrome’s code, reaching 99,999 takes roughly 90 minutes of clean play. Our top 10 only takes scores up to 99,999."
             }
           },
           {
@@ -179,6 +179,7 @@
       <p class="dek">The little T-Rex from Chrome’s “No internet” page, here so you can play with the internet on.</p>
       <div class="toolbar">
         <div class="toolbar-actions">
+          <button type="button" class="name-control board-only" id="name-control" aria-expanded="false" aria-controls="board-entry-slot" data-change="Your name" data-set="Set name"><span class="name-control-label">Set name</span></button><script>(function(){try{var n=localStorage.getItem('dino.game.leaderboardName'),b=document.getElementById('name-control');if(n&&b){b.firstChild.textContent=n;b.setAttribute('aria-label',b.getAttribute('data-change')+', '+n);}}catch(e){}})();</script>
           <button type="button" id="mute-button" aria-pressed="false">Mute</button>
           <button type="button" id="fullscreen-button" aria-pressed="false">Fullscreen</button>
         </div>
@@ -204,19 +205,30 @@
       <h2 class="visually-hidden" id="top10-title">Top 10</h2>
       <p class="visually-hidden" id="board-msg" role="status" aria-live="polite" aria-atomic="true"></p>
       <div class="entry-anchor" id="board-entry-slot"></div>
-      <div class="pixel-frame board-panel">
-        <div class="pixel-inner">
-          <div class="board-head">
-            <div class="board-switch" role="group" aria-label="Board period">
-              <button type="button" data-period="today" aria-pressed="true">Today</button>
-              <button type="button" data-period="all" aria-pressed="false">All time</button>
+      <div class="board-columns">
+        <div class="pixel-frame board-panel" data-col="today">
+          <div class="pixel-inner">
+            <div class="board-head">
+              <div class="board-switch" role="group" aria-label="Board period">
+                <button type="button" data-period="today" aria-pressed="true">Today</button>
+                <button type="button" data-period="all" aria-pressed="false">All time</button>
+              </div>
+              <h3 class="board-period-title">Today</h3>
+              <p class="board-count" id="board-meta"></p>
             </div>
-            <p class="board-count" id="board-meta"></p>
+            <div class="board-body" id="board-body" data-state="idle"></div>
           </div>
-          <div class="board-body" id="board-body" data-state="idle"></div>
-          <p class="board-foot"><a href="/privacy/#leaderboard">Names are public</a></p>
+        </div>
+        <div class="pixel-frame board-panel board-panel--all" data-col="all">
+          <div class="pixel-inner">
+            <div class="board-head">
+              <h3 class="board-period-title">All time</h3>
+            </div>
+            <div class="board-body" id="board-body-all" data-state="idle"></div>
+          </div>
         </div>
       </div>
+      <p class="board-foot"><a href="/privacy/#leaderboard">Names are public</a></p>
     </section>
 
     <article class="article" id="article">
@@ -225,7 +237,7 @@
       <p>On a computer, press <kbd class="kbd">Space</kbd> or the Up arrow (or click the game) to start and to&nbsp;jump. Hold the key for a full-height jump over a tall cluster, or let go just after take-off to cut the jump short, which is enough for a single small cactus. Press the Down arrow to duck, or press it in mid-air to drop faster. After a crash, Enter starts a new run straight away. Space and Up work too after a short pause, or you can click the game.</p>
       <p>On a phone or tablet, tap the game to start and to&nbsp;jump. You can’t duck by touch, so ducking needs a keyboard. Turn the screen to landscape for a wider view of what’s coming.</p>
       <p>There’s nothing to sign up for and no advert before the game. Mute turns the beeps off and Fullscreen gives the runner the whole screen. Your high score and your mute setting are saved in this browser.</p>
-      <p class="board-only board-note">A top 10 run can go on the board, with just a name.</p>
+      <p class="board-only board-note">If a run makes the top 10, you can add it to the board. All it needs is a nickname.</p>
 
       <h2>Tips for a higher score</h2>
       <p>Watch the right-hand side of the desert, not the dinosaur. Obstacles are easier to judge when you see them arriving than when you stare at the T-Rex’s feet. At top speed, late jumps cause most crashes, not early ones.</p>
@@ -243,12 +255,13 @@
       <p>Type <span class="kbd">chrome://dino</span> into Chrome’s address bar, or wait for the “No internet” page and start the game there. The address works even when you’re online.</p>
       <h3>Does it ever end?</h3>
       <p>No. There’s no finish line, and a run only ends when you hit something. The “17 million years” you may have heard about is a nod to how long the T-Rex was around, not a real ending. The only thing to beat is your own high score.</p>
-      <p class="board-only">There is also an unofficial public top 10 on this page, but the high score on this device is the one that always stays with you.</p>
+      <p class="board-only">This page also has an unofficial top 10 if you want to post a score. Your own high score stays saved in this browser either way.</p>
       <h3>What happens after 99,999?</h3>
       <p>The counter goes to six digits and the run carries on. By our estimate from Chrome’s code, reaching 99,999 takes roughly 90 minutes of clean play.</p>
+      <p class="board-only">Our top 10 only takes scores up to 99,999.</p>
       <h3>Is there an official world record?</h3>
       <p>Not that we know of. Google doesn’t publish a leaderboard or an official record, and bots and cheats are easy, so treat huge scores you see online with caution.</p>
-      <p class="board-only">The top 10 on this site is ours: unofficial, and not cheat-proof.</p>
+      <p class="board-only">Our own top 10 is unofficial too, and we can’t stop every cheat.</p>
       <h3>Why does a Chromebook say “The owner of this device turned off the dinosaur game”?</h3>
       <p>Some managed Chromebooks hide the game with an admin policy called AllowDinosaurEasterEgg. That only affects Chrome’s own copy on that device. This site still works in a normal browser.</p>
       <h3>Is there source code for the Chrome dinosaur game?</h3>
@@ -257,7 +270,7 @@
   </main>
 
   <footer class="site-footer">
-    <p>Game based on the Chromium T-Rex runner, © The Chromium Authors, used under a BSD licence. Unofficial; not made or endorsed by Google.</p>
+    <p>Game based on the Chromium T-Rex runner, © The Chromium Authors, used under the <a href="/license/">BSD 3-Clause licence</a>. Unofficial; not made or endorsed by Google.</p>
     <p>Google and Chrome are trademarks of Google LLC.</p>
     <ul class="footer-links">
       <li><a href="/license/">Licence</a></li>
