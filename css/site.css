@@ -278,7 +278,10 @@ a:hover {
   min-height: 36px;
 }
 
-.toolbar button:hover,
+.toolbar button:hover {
+  border-color: #b9b9b2;
+}
+
 .toolbar button:focus-visible {
   border-color: #b9b9b2;
   outline: 2px solid #1b1b19;
@@ -1068,6 +1071,13 @@ html:has(meta[name="dino-leaderboard-api"]) .article {
   white-space: nowrap;
 }
 
+/* Tester info: the confirm's own buttons are at least 24px tall with real
+   padding on a mouse too (touch gets 44px below). */
+.row-confirm .confirm-btn--quiet {
+  min-height: 24px;
+  padding: 0.25rem 0.5rem;
+}
+
 /* 44px hit area without taking 44px of room. */
 .row-action::before,
 .confirm-btn--quiet::before {
@@ -1303,14 +1313,93 @@ html.lb-text-large .place-name { font-size: 0.75rem; }
 html.lb-text-large .place-score { font-size: min(0.9rem, 5vw); }
 html.lb-text-large .step-rank { font-size: 0.55rem; }
 html.lb-text-large .place-dino { width: 36px; height: 38px; }
-/* The list's name column gives way first at 200% text, so the score never
-   pushes the row sideways; names ellipsise, the full name is in the label. */
-html.lb-text-large .board-row .row-btn { grid-template-columns: 1.7rem minmax(0, 1fr) max-content; }
-/* At 320 with 200% text there is no room for name and score side by side:
-   the score drops under the name so the name keeps the full width. */
-@media (max-width: 359px) {
-  html.lb-text-large .board-row .row-btn { grid-template-columns: 1.7rem minmax(0, 1fr); row-gap: 0; }
-  html.lb-text-large .board-row .board-score { grid-column: 2; }
+/* UI/UX 6cd32a6 must-fix: at 200% text names wrap to two lines instead of
+   collapsing to "Wo...", the board's side padding is capped in px so the
+   doubled rem padding doesn't starve the columns, and list scores sit under
+   the name at every width. Full names stay in each row's aria-label. */
+html.lb-text-large .board {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+html.lb-text-large .place-name,
+html.lb-text-large .board-name {
+  white-space: normal;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.15;
+  max-width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+html.lb-text-large .place-score {
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+html.lb-text-large .board-row .row-btn {
+  grid-template-columns: 1.7rem minmax(0, 1fr);
+}
+
+html.lb-text-large .board-row .board-score {
+  grid-column: 2;
+  justify-self: start;
+}
+
+/* Below 48rem: stacked hero. 1st full width on top, 2nd and 3rd side by
+   side underneath, both left-aligned. From 48rem the 2-1-3 podium stays. */
+@media (max-width: 47.99rem) {
+  html.lb-text-large .podium,
+  html.lb-text-large .podium-steps {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "p1 p1"
+      "p2 p3";
+    align-items: end;
+    column-gap: 0.45rem;
+  }
+  html.lb-text-large .podium-wrap {
+    --p1: 64px;
+    --p2: 48px;
+    --p3: 48px;
+  }
+  html.lb-text-large .place--1 {
+    text-align: center;
+    align-items: center;
+  }
+  html.lb-text-large .place--2,
+  html.lb-text-large .place--3 {
+    text-align: left;
+    align-items: flex-start;
+  }
+  html.lb-text-large .place--1 .place-name { font-size: 0.8rem; }
+  html.lb-text-large .place-name { font-size: 0.7rem; }
+  /* Stacked, the columns are wide again: full score sizes, no vw cap. */
+  html.lb-text-large .place--1 { padding-bottom: calc(var(--p1) + var(--score-gap)); }
+  html.lb-text-large .place--1 .place-score { font-size: 1.25rem; }
+  html.lb-text-large .place-score { font-size: 0.9rem; }
+}
+
+/* Tester N6: on a phone at normal text size a long podium name wraps to a
+   second line instead of cutting at about 8 characters, the same treatment
+   as 200% text (UI/UX 6cd32a6). Short names are unchanged. */
+@media (max-width: 47.99rem) {
+  .place-name {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    line-height: 1.15;
+  }
 }
 
 /* ---- v2.2 toolbar name control: quiet, before Mute ---- */
