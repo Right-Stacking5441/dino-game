@@ -1233,12 +1233,26 @@ html.lb-text-large .row-confirm-actions .confirm-btn--quiet::before {
     visibility: hidden;
   }
 
-  /* Podium: under the name and score, as in the open state, not on the step. */
-  .place:not(.is-open):hover .row-reveal,
-  .place:not(.is-open):focus-within .row-reveal {
+  /* Podium: under the score, laid over the place's reserved step room, so
+     the place never grows and nothing moves (Tester 2c80350 P1). The script
+     sets --hover-x/--hover-y and .hover-fit only when it fits. */
+  .place.hover-fit:not(.is-open):hover .row-reveal,
+  .place.hover-fit:not(.is-open):focus-within .row-reveal {
     display: block;
-    position: static;
-    padding: 0.1rem 0 0;
+    position: absolute;
+    top: var(--hover-y, 0);
+    left: var(--hover-x, 0);
+    z-index: 2;
+    padding: 0;
+  }
+
+  .place.hover-measure:not(.is-open) .row-reveal {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+    visibility: hidden;
   }
 }
 
