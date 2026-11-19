@@ -1246,6 +1246,14 @@ html.lb-text-large .row-confirm-actions .confirm-btn--quiet::before {
     padding: 0;
   }
 
+  /* Tester c222860 R1: the podium link's hit area reaches down only, to
+     --hit-h (up to 44px, never into the numeral), never up into the score. */
+  .place.hover-fit:not(.is-open) .row-action::before {
+    top: 0;
+    height: var(--hit-h, 100%);
+    transform: translateX(-50%);
+  }
+
   .place.hover-measure:not(.is-open) .row-reveal {
     display: block;
     position: absolute;
