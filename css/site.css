@@ -1149,6 +1149,42 @@ html:has(meta[name="dino-leaderboard-api"]) .article {
   }
 }
 
+/* Tester 5d3fa9d A1-OVF: the confirm never runs off the side. The question
+   wraps, and the two answers drop to their own line when they don't fit
+   (Cancel still first). At 200% text the answers keep 44px (touch) or 24px
+   (mouse) but use px side padding, so a long ES/PT word still fits a column. */
+.row-reveal {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.row-confirm {
+  display: flex;
+  max-width: 100%;
+  row-gap: 0.2rem;
+}
+
+.board-confirm-q {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.row-confirm-actions {
+  flex-wrap: wrap;
+  max-width: 100%;
+  row-gap: 0.2rem;
+}
+
+html.lb-text-large .row-confirm-actions .confirm-btn--quiet {
+  flex: 0 0 auto;
+  padding-right: 6px;
+  padding-left: 6px;
+}
+
+html.lb-text-large .row-confirm-actions .confirm-btn--quiet::before {
+  width: calc(100% + 12px);
+}
+
 /* Open (tap, click or Enter): the row grows by one line, link under the name. */
 .board-row.is-open .row-reveal,
 .place.is-open .row-reveal {
@@ -1175,15 +1211,26 @@ html:has(meta[name="dino-leaderboard-api"]) .article {
    columns (so names still fit at 200% text). The click toggle stays the
    source of truth. */
 @media (hover: hover) and (pointer: fine) {
-  /* 4 to 10: just left of the score, never over it (UI/UX 13:32). */
-  .board-row:not(.is-open):hover .row-reveal,
-  .board-row:not(.is-open):focus-within .row-reveal {
+  /* 4 to 10: in the free space between the end of the name and the score,
+     never over either (Tester 5d3fa9d). The script measures the row and
+     sets --hover-x and .hover-fit only when the link fits; otherwise the
+     hover shows nothing and a click opens the row as usual. Absolute, so
+     no layout shift. */
+  .board-row.hover-fit:not(.is-open):hover .row-reveal,
+  .board-row.hover-fit:not(.is-open):focus-within .row-reveal {
     display: block;
     position: absolute;
     top: 50%;
-    right: 4.6rem;
+    left: var(--hover-x, 0);
     transform: translateY(-50%);
-    background: var(--board-fill);
+  }
+
+  .board-row.hover-measure:not(.is-open) .row-reveal {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    visibility: hidden;
   }
 
   /* Podium: under the name and score, as in the open state, not on the step. */
@@ -1366,7 +1413,7 @@ html.lb-text-large .board-row .board-score {
 @media (max-width: 47.99rem) {
   html.lb-text-large .podium,
   html.lb-text-large .podium-steps {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-areas:
       "p1 p1"
       "p2 p3";
