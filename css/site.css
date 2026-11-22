@@ -200,6 +200,8 @@ a:hover {
 
 .toolbar-actions {
   display: flex;
+  flex-wrap: wrap; /* v2.2: Set name + Mute + Fullscreen wrap at 320 ES/PT */
+  justify-content: flex-end;
   gap: 0.4rem;
   margin-inline-start: auto;
 }
@@ -276,7 +278,10 @@ a:hover {
   min-height: 36px;
 }
 
-.toolbar button:hover,
+.toolbar button:hover {
+  border-color: #b9b9b2;
+}
+
 .toolbar button:focus-visible {
   border-color: #b9b9b2;
   outline: 2px solid #1b1b19;
@@ -509,8 +514,1047 @@ a:hover {
 
 .score-line {
   margin: 0.7rem 0 0;
+}
+
+/* v2.2: tighter under the stage when the board is on, so the whole podium
+   is on the first 390x844 screen. */
+html:has(meta[name="dino-leaderboard-api"]) .hero .score-line {
+  margin-top: 0.35rem;
   color: var(--muted);
   font-size: 0.9rem;
+}
+
+/* Top 10 board, UI/UX v2 (18 Nov 2026, owner feedback) + v2.1 touch
+   access. Shows only when the build switched the leaderboard on (meta
+   dino-leaderboard-api), so pages without it look exactly as before.
+   Tweak points: the tokens just below, podium sizes in the media blocks at
+   the end, and --board-h (the reserved height, zero CLS). */
+:root {
+  --board-fill: #f6f6f3;
+  --entry-fill: #fff;
+  --frame: #c8c8c2;
+  --step: 4px;
+  --ink-game: #535353;
+}
+
+.board,
+.board-only {
+  display: none;
+}
+
+html:has(meta[name="dino-leaderboard-api"]) .board,
+html:has(meta[name="dino-leaderboard-api"]) p.board-only {
+  display: block;
+}
+
+html:has(meta[name="dino-leaderboard-api"]) li.board-only {
+  display: list-item;
+}
+
+html:has(meta[name="dino-leaderboard-api"]) .article {
+  padding-top: 2rem;
+}
+
+.article .board-note {
+  margin-top: 0.7rem;
+}
+
+.board .visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.board {
+  position: relative;
+  max-width: var(--stage-max);
+  margin: 0 auto;
+  padding: 0.4rem 1.25rem 0.15rem; /* v2.2: was 1.15rem on top */
+}
+
+/* Stepped 1px frame: the outer clip is the outline, the 1px padding is the
+   ink, the inner fill is the tint. Corners cut at --step. No radius, no
+   shadow. */
+.pixel-frame,
+.pixel-inner {
+  clip-path: polygon(
+    var(--step) 0,
+    calc(100% - var(--step)) 0,
+    100% var(--step),
+    100% calc(100% - var(--step)),
+    calc(100% - var(--step)) 100%,
+    var(--step) 100%,
+    0 calc(100% - var(--step)),
+    0 var(--step)
+  );
+}
+
+.pixel-frame {
+  max-width: var(--max);
+  padding: 1px;
+  background: var(--frame);
+}
+
+.pixel-inner {
+  background: var(--board-fill);
+}
+
+.board-panel .pixel-inner {
+  padding: 0.15rem 0.85rem 0.7rem;
+}
+
+.entry-panel {
+  margin: 0 0 0.7rem;
+}
+
+.entry-panel .pixel-inner {
+  padding: 0.75rem 0.85rem 0.7rem;
+  background: var(--entry-fill);
+}
+
+/* Header: the period switch is the title; the countdown is small print. */
+.board-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 0.75rem;
+  min-height: 44px;
+  border-bottom: 1px solid var(--line);
+}
+
+.board-switch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.board-switch button {
+  appearance: none;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0 0.65rem;
+  min-height: 44px;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.board-switch button + button {
+  border-left: 1px solid var(--line);
+}
+
+.board-switch button[aria-pressed="true"] {
+  color: var(--text);
+  font-weight: 650;
+}
+
+.board-switch button:hover {
+  color: var(--text);
+}
+
+.board-count {
+  margin: 0 0 0 0.15rem;
+  margin-inline-start: auto;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.3;
+  font-variant-numeric: tabular-nums;
+}
+
+.board-switch button:focus-visible,
+.entry input:focus-visible,
+.entry-post:focus-visible,
+.entry-skip:focus-visible,
+.board-retry:focus-visible,
+.row-btn:focus-visible,
+.row-action:focus-visible,
+.confirm-btn:focus-visible,
+.board-foot a:focus-visible {
+  outline: 2px solid #1b1b19;
+  outline-offset: 2px;
+}
+
+/* Reserved: podium plus seven rows, so loading, empty, error and the
+   filled board take the same room and nothing below moves. */
+.board-body {
+  display: flow-root;
+  min-height: var(--board-h, 26rem);
+}
+
+/* ---- Name entry: white frame above the board, only after a qualifying run */
+.entry-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.entry-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.4rem 0.5rem;
+}
+
+/* The field and Legal's line under it ("Shown publicly...") move together. */
+.entry-field {
+  flex: 1 1 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.entry-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.2rem 0.3rem;
+}
+
+.entry input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--text);
+  font: inherit;
+  font-size: 1rem;
+}
+
+.entry input:hover {
+  border-color: #b9b9b2;
+}
+
+@media (min-width: 40rem) {
+  .entry-field {
+    flex: 1 1 12rem;
+    max-width: 22rem;
+  }
+}
+
+.entry-public,
+.entry-hint,
+.entry-error {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.entry-error {
+  color: var(--text);
+}
+
+.entry-post,
+.board-retry {
+  appearance: none;
+  min-height: 44px;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.entry-post:hover,
+.board-retry:hover {
+  border-color: #b9b9b2;
+}
+
+.entry-skip,
+.row-action,
+.confirm-btn--quiet {
+  appearance: none;
+  position: relative;
+  margin: 0;
+  padding: 0.45rem 0.5rem;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.entry-skip {
+  min-height: 44px;
+}
+
+.entry-skip:hover,
+.row-action:hover,
+.confirm-btn--quiet:hover,
+.board-foot a:hover {
+  color: var(--text);
+}
+
+.entry-anchor {
+  scroll-margin-bottom: var(--kb-pad, 0px);
+}
+
+/* ---- Podium: the hero. Source order 1, 2, 3; visual order 2, 1, 3. ---- */
+.podium-wrap {
+  position: relative;
+  margin: 0.45rem 0 0.35rem; /* v2.2: was 0.85rem on top */
+  /* Step heights (2nd / 1st / 3rd): 390 is the default; px bands below. */
+  --p1: 100px;
+  --p2: 46px;
+  --p3: 46px;
+  --score-gap: 5px; /* 2nd and 3rd sit this far above their step */
+}
+
+.podium,
+.podium-steps {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.22fr) minmax(0, 1fr);
+  grid-template-areas: "p2 p1 p3";
+  column-gap: 0.45rem;
+  align-items: end;
+}
+
+.podium {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.place {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.place--1 { grid-area: p1; padding-bottom: var(--p1); align-items: center; text-align: center; }
+.place--2 { grid-area: p2; padding-bottom: calc(var(--p2) + var(--score-gap)); align-items: flex-start; text-align: left; }
+.place--3 { grid-area: p3; padding-bottom: calc(var(--p3) + var(--score-gap)); align-items: flex-end; text-align: right; }
+
+.place-dino {
+  display: block;
+  width: 48px;
+  height: 51px;
+  margin: 0.25rem 0 -2px;
+  /* 1st's padding equals its step, so the dino stands on the ground. */
+  object-fit: contain;
+  object-position: bottom center;
+  image-rendering: pixelated;
+  position: relative;
+  z-index: 2;
+}
+
+.place--1 .row-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.place-name {
+  display: block;
+  max-width: 100%;
+  padding: 0 0.15rem;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.place-score {
+  display: block;
+  margin: 0.08rem 0 0;
+  padding: 0 0.15rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  white-space: nowrap; /* a score never wraps mid-number */
+}
+
+.place--1 .place-name {
+  color: var(--text);
+  font-size: 1.15rem;
+  font-weight: 650;
+}
+
+.place--1 .place-score {
+  color: var(--text);
+  font-size: 1.85rem;
+  font-weight: 650;
+  letter-spacing: -0.04em;
+}
+
+.place--you .place-name,
+.place--you .place-score {
+  color: var(--text);
+  font-weight: 650;
+}
+
+.podium-steps {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.step {
+  position: relative;
+  width: 100%;
+  background: var(--game-bg);
+}
+
+.step--1 { grid-area: p1; height: var(--p1); background: #efefe9; }
+.step--2 { grid-area: p2; height: var(--p2); }
+.step--3 { grid-area: p3; height: var(--p3); }
+
+/* Each place is a stretch of the game's own horizon at three heights. */
+.step::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 12px;
+  background: url("../assets/leaderboard/horizon.png") repeat-x 0 0 / 600px 12px;
+  image-rendering: pixelated;
+}
+
+.step-rank {
+  position: absolute;
+  right: 0;
+  bottom: 4px;
+  left: 0;
+  color: var(--ink-game);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-align: center;
+}
+
+/* ---- Places 4 to 10: secondary, a typeset list in the same frame. ---- */
+.board-list {
+  margin: 0.2rem 0 0;
+  padding: 0.15rem 0 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.board-row {
+  position: relative;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.88rem;
+  line-height: 1.3;
+}
+
+.board-row:last-child {
+  border-bottom: 0;
+}
+
+.board-row .row-btn {
+  display: grid;
+  grid-template-columns: 1.7rem minmax(4.5rem, 1fr) max-content;
+  column-gap: 0.6rem;
+  align-items: center;
+  padding: 0.28rem 0 0.26rem;
+}
+
+.board-rank {
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+.board-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.board-score {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.88rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Your row: 2px ink bar and weight only; "you" is in the accessible name. */
+.board-row--you,
+.place--you {
+  box-shadow: inset 2px 0 0 var(--ink-game);
+}
+
+.board-row--you {
+  padding-left: 0.65rem;
+  margin-left: -0.65rem;
+  font-weight: 650;
+}
+
+.board-message {
+  margin: 0.85rem 0 0.5rem;
+}
+
+.board-message p {
+  margin: 0 0 0.55rem;
+  max-width: 24rem;
+  color: var(--text);
+}
+
+.board-foot {
+  max-width: var(--max);
+  margin: 0.4rem 0 0;
+  padding: 0 0.15rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+.board-foot a {
+  color: var(--muted);
+  text-underline-offset: 0.15em;
+}
+
+/* ---- v2.1: rows are disclosure buttons; one quiet link under the name ---- */
+.row-btn {
+  appearance: none;
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.row-reveal {
+  display: none;
+}
+
+.row-action,
+.confirm-btn--quiet {
+  padding: 0.2rem 0.15rem;
+  font-size: 0.75rem;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+/* Tester 9c22ee6 A1 (WCAG 2.2 2.5.8): the revealed Report/Remove button is
+   at least 24px tall itself, not only through its 44px ::before hit area. */
+.row-action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  vertical-align: middle;
+}
+
+/* Tester info: the confirm's own buttons are at least 24px tall with real
+   padding on a mouse too (touch gets 44px below). */
+.row-confirm .confirm-btn--quiet {
+  min-height: 24px;
+  padding: 0.25rem 0.5rem;
+}
+
+/* 44px hit area without taking 44px of room. */
+.row-action::before,
+.confirm-btn--quiet::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 44px);
+  height: 44px;
+  transform: translate(-50%, -50%);
+}
+
+.row-action.is-done {
+  text-decoration: none;
+  cursor: default;
+}
+
+.row-confirm {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.5rem;
+  color: var(--text);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+/* Report and Remove confirms (Tester B2, B12): the two answers sit apart so
+   their hit areas never overlap. */
+.row-confirm-actions {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0 1.1rem;
+}
+
+.row-confirm-actions .confirm-btn--quiet::before {
+  width: calc(100% + 1rem);
+  min-width: 0;
+}
+
+/* Touch: real 44px targets, no overlay, at least 12px apart. */
+@media (pointer: coarse) {
+  .row-confirm {
+    align-items: center;
+  }
+
+  .row-confirm-actions {
+    align-items: center;
+    gap: 0 0.75rem;
+  }
+
+  .row-confirm-actions .confirm-btn--quiet {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 0.6rem;
+  }
+
+  .row-confirm-actions .confirm-btn--quiet::before {
+    content: none;
+  }
+}
+
+/* Tester 5d3fa9d A1-OVF: the confirm never runs off the side. The question
+   wraps, and the two answers drop to their own line when they don't fit
+   (Cancel still first). At 200% text the answers keep 44px (touch) or 24px
+   (mouse) but use px side padding, so a long ES/PT word still fits a column. */
+.row-reveal {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.row-confirm {
+  display: flex;
+  max-width: 100%;
+  row-gap: 0.2rem;
+}
+
+.board-confirm-q {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.row-confirm-actions {
+  flex-wrap: wrap;
+  max-width: 100%;
+  row-gap: 0.2rem;
+}
+
+html.lb-text-large .row-confirm-actions .confirm-btn--quiet {
+  flex: 0 0 auto;
+  padding-right: 6px;
+  padding-left: 6px;
+}
+
+html.lb-text-large .row-confirm-actions .confirm-btn--quiet::before {
+  width: calc(100% + 12px);
+}
+
+/* Open (tap, click or Enter): the row grows by one line, link under the name. */
+.board-row.is-open .row-reveal,
+.place.is-open .row-reveal {
+  display: block;
+  padding: 0 0 0.3rem;
+  animation: row-reveal 120ms ease-out;
+}
+
+.board-row.is-open .row-reveal {
+  padding-left: calc(1.7rem + 0.6rem);
+}
+
+.place.is-open .row-reveal {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes row-reveal {
+  from { opacity: 0; transform: translateY(-2px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Mouse shortcut: hover or row focus shows the same link, outside the row's
+   columns (so names still fit at 200% text). The click toggle stays the
+   source of truth. */
+@media (hover: hover) and (pointer: fine) {
+  /* 4 to 10: in the free space between the end of the name and the score,
+     never over either (Tester 5d3fa9d). The script measures the row and
+     sets --hover-x and .hover-fit only when the link fits; otherwise the
+     hover shows nothing and a click opens the row as usual. Absolute, so
+     no layout shift. */
+  .board-row.hover-fit:not(.is-open):hover .row-reveal,
+  .board-row.hover-fit:not(.is-open):focus-within .row-reveal {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: var(--hover-x, 0);
+    transform: translateY(-50%);
+  }
+
+  .board-row.hover-measure:not(.is-open) .row-reveal {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+  }
+
+  /* Podium: under the score, laid over the place's reserved step room, so
+     the place never grows and nothing moves (Tester 2c80350 P1). The script
+     sets --hover-x/--hover-y and .hover-fit only when it fits. */
+  .place.hover-fit:not(.is-open):hover .row-reveal,
+  .place.hover-fit:not(.is-open):focus-within .row-reveal {
+    display: block;
+    position: absolute;
+    top: var(--hover-y, 0);
+    left: var(--hover-x, 0);
+    z-index: 2;
+    padding: 0;
+  }
+
+  /* Tester c222860 R1: the podium link's hit area reaches down only, to
+     --hit-h (up to 44px, never into the numeral), never up into the score. */
+  .place.hover-fit:not(.is-open) .row-action::before {
+    top: 0;
+    height: var(--hit-h, 100%);
+    transform: translateX(-50%);
+  }
+
+  .place.hover-measure:not(.is-open) .row-reveal {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+    visibility: hidden;
+  }
+}
+
+/* Reserved board height in px (UI/UX 13:32), so large text never leaves a
+   huge hole. Measured with a full board (podium plus 7 rows) per band. */
+.board {
+  --board-h: 480px;
+}
+
+/* Touch: full-width rows get a 44px target. */
+@media (pointer: coarse) {
+  .board {
+    --board-h: 552px;
+  }
+
+  .board-row .row-btn {
+    min-height: 44px;
+  }
+}
+
+/* Empty, error and offline need no podium-sized hole (UI/UX 13:32). */
+.board-body[data-state="empty"],
+.board-body[data-state="error"],
+.board-body[data-state="offline"] {
+  min-height: 0;
+}
+
+/* ---- v2.2 podium bands, in px so 390 is 390 (SPEC v2.2 table) ---- */
+@media (max-width: 359px) {
+  /* 320 */
+  .podium-wrap { --p1: 76px; --p2: 40px; --p3: 40px; }
+  .place-dino { width: 40px; height: 43px; }
+  .place--1 .place-name { font-size: 1.05rem; }
+  .place--1 .place-score { font-size: 1.7rem; }
+  .place-name { font-size: 0.75rem; }
+  .place-score { font-size: 0.95rem; }
+
+  .board-panel .pixel-inner,
+  .entry-panel .pixel-inner {
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+  }
+}
+
+@media (min-width: 360px) and (max-width: 389px) {
+  /* 360 */
+  .podium-wrap { --p1: 88px; --p2: 44px; --p3: 44px; }
+  .place-dino { width: 44px; height: 47px; }
+  .place--1 .place-name { font-size: 1.1rem; }
+  .place--1 .place-score { font-size: 1.8rem; }
+  .place-name { font-size: 0.78rem; }
+  .place-score { font-size: 0.95rem; }
+}
+
+/* 390 is the default above: 46 / 100 / 46, 1st 1.15rem / 1.85rem. */
+
+@media (min-width: 48rem) {
+  .podium-wrap { --p1: 120px; --p2: 52px; --p3: 52px; }
+  .place-dino { width: 56px; height: 60px; }
+  .place--1 .place-name { font-size: 1.2rem; }
+  .place--1 .place-score { font-size: 2.05rem; }
+  .place-name { font-size: 0.82rem; }
+  .place-score { font-size: 1rem; }
+
+  .board-panel .pixel-inner {
+    padding: 0.2rem 1.15rem 0.85rem;
+  }
+
+  .entry-panel .pixel-inner {
+    padding: 0.9rem 1.15rem 0.85rem;
+  }
+}
+
+/* ---- v2.2 desktop: Today and All time side by side, from 48rem, never at
+   large text (html.lb-text-large, set by the game script). ---- */
+.board-columns {
+  max-width: var(--max);
+}
+
+.board-panel--all,
+.board-period-title {
+  display: none;
+}
+
+.board-period-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  line-height: 1;
+}
+
+@media (min-width: 48rem) {
+  html:not(.lb-text-large) .board-columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: start;
+    max-width: none;
+  }
+
+  html:not(.lb-text-large) .board-columns .pixel-frame {
+    max-width: none;
+  }
+
+  html:not(.lb-text-large) .board-panel--all,
+  html:not(.lb-text-large) .board-period-title {
+    display: block;
+  }
+
+  html:not(.lb-text-large) .board-switch {
+    display: none;
+  }
+
+  html:not(.lb-text-large) .board-foot {
+    max-width: none;
+  }
+}
+
+/* ---- Large text (200%): podium scales down so names and scores fit ---- */
+html.lb-text-large .board { --board-h: 640px; }
+html.lb-text-large .podium-wrap { --p1: 72px; --p2: 52px; --p3: 52px; }
+html.lb-text-large .place--1 .place-name { font-size: 0.8rem; }
+html.lb-text-large .place--1 .place-score { font-size: min(1.25rem, 7vw); }
+html.lb-text-large .place-name { font-size: 0.75rem; }
+/* Scores never wrap, so on a phone they are capped by the viewport too:
+   a five-digit score at 200% text otherwise runs into its neighbour. */
+html.lb-text-large .place-score { font-size: min(0.9rem, 5vw); }
+html.lb-text-large .step-rank { font-size: 0.55rem; }
+html.lb-text-large .place-dino { width: 36px; height: 38px; }
+/* UI/UX 6cd32a6 must-fix: at 200% text names wrap to two lines instead of
+   collapsing to "Wo...", the board's side padding is capped in px so the
+   doubled rem padding doesn't starve the columns, and list scores sit under
+   the name at every width. Full names stay in each row's aria-label. */
+html.lb-text-large .board {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+html.lb-text-large .place-name,
+html.lb-text-large .board-name {
+  white-space: normal;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.15;
+  max-width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+html.lb-text-large .place-score {
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+html.lb-text-large .board-row .row-btn {
+  grid-template-columns: 1.7rem minmax(0, 1fr);
+}
+
+html.lb-text-large .board-row .board-score {
+  grid-column: 2;
+  justify-self: start;
+}
+
+/* Below 48rem: stacked hero. 1st full width on top, 2nd and 3rd side by
+   side underneath, both left-aligned. From 48rem the 2-1-3 podium stays. */
+@media (max-width: 47.99rem) {
+  html.lb-text-large .podium,
+  html.lb-text-large .podium-steps {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "p1 p1"
+      "p2 p3";
+    align-items: end;
+    column-gap: 0.45rem;
+  }
+  html.lb-text-large .podium-wrap {
+    --p1: 64px;
+    --p2: 48px;
+    --p3: 48px;
+  }
+  html.lb-text-large .place--1 {
+    text-align: center;
+    align-items: center;
+  }
+  html.lb-text-large .place--2,
+  html.lb-text-large .place--3 {
+    text-align: left;
+    align-items: flex-start;
+  }
+  html.lb-text-large .place--1 .place-name { font-size: 0.8rem; }
+  html.lb-text-large .place-name { font-size: 0.7rem; }
+  /* Stacked, the columns are wide again: full score sizes, no vw cap. */
+  html.lb-text-large .place--1 { padding-bottom: calc(var(--p1) + var(--score-gap)); }
+  html.lb-text-large .place--1 .place-score { font-size: 1.25rem; }
+  html.lb-text-large .place-score { font-size: 0.9rem; }
+}
+
+/* UI/UX nits (v2.2 round): at 200% text the 1st-place score gets a gap
+   above the step's top line. */
+html.lb-text-large .place--1 .place-score { margin-bottom: 6px; }
+/* Stacked (below 48rem), the steps overlay shares its spare height between
+   its two rows, so step 1's top line did not track the 1st place's bottom
+   and the margin above barely showed. Step 1 is drawn by the 1st place
+   itself instead, so the score always sits 5px + 6px above its line. The
+   overlay's step 1 stays as an invisible spacer so steps 2 and 3 do not move. */
+@media (max-width: 47.99rem) {
+  html.lb-text-large .podium-steps .step--1 { visibility: hidden; }
+  html.lb-text-large .place--1::after {
+    content: "1" / "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    box-sizing: border-box;
+    height: var(--p1);
+    padding-bottom: 4px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    background:
+      url("../assets/leaderboard/horizon.png") repeat-x 0 0 / 600px 12px,
+      #efefe9;
+    image-rendering: pixelated;
+    color: var(--ink-game);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.55rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+}
+/* Today and All time: the divider goes only when they really wrap onto two
+   lines (Tester 755731c: ES/PT fit on one line at 320). The game script
+   measures with the class off and sets .board-switch--wrapped; wrapped,
+   both tabs start flush left, sharing the board content's left edge, and
+   stay stacked so dropping the padding can't flip the result. */
+.board-switch--wrapped {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.board-switch--wrapped button {
+  padding-left: 0;
+}
+.board-switch.board-switch--wrapped button + button {
+  border-left: 0;
+}
+
+/* Tester N6: on a phone at normal text size a long podium name wraps to a
+   second line instead of cutting at about 8 characters, the same treatment
+   as 200% text (UI/UX 6cd32a6). Short names are unchanged. */
+@media (max-width: 47.99rem) {
+  .place-name {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    line-height: 1.15;
+  }
+}
+
+/* ---- v2.2 toolbar name control: quiet, before Mute ---- */
+.name-control-label {
+  display: inline-block;
+  max-width: 9em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+.name-control[aria-expanded="true"] {
+  border-color: var(--text);
+}
+
+html:has(meta[name="dino-leaderboard-api"]) .toolbar .name-control.board-only {
+  display: inline-flex;
+  align-items: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .board-row.is-open .row-reveal,
+  .place.is-open .row-reveal {
+    animation: none;
+  }
 }
 
 /* When an ad is approved, drop .ad-slot--empty so the reserved 90px slot
@@ -733,7 +1777,8 @@ a:hover {
 @media (max-width: 360px) {
   /* ES/PT: keep the high-score line on one line and the three site links
      on one row at 320px. */
-  :root:not(:lang(en)) .score-line {
+  :root:not(:lang(en)) .score-line,
+  html:not(:lang(en)):has(meta[name="dino-leaderboard-api"]) .hero .score-line {
     font-size: 0.78rem;
   }
 

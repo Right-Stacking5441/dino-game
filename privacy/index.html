@@ -18,12 +18,12 @@
   <meta property="og:title" content="Privacy and cookies | dino.game">
   <meta property="og:description" content="How dino.game uses cookies, Google Analytics and the high score saved on your device.">
   <meta property="og:url" content="https://dino.game/privacy/">
-  <meta property="og:image" content="https://dino.game/assets/share-1200x630-nochrome.png">
+  <meta property="og:image" content="https://dino.game/assets/share-1200x630-en.png">
   <meta property="og:image:alt" content="The T-Rex from the dino game, with the internet on">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Privacy and cookies | dino.game">
   <meta name="twitter:description" content="How dino.game uses cookies, Google Analytics and the high score saved on your device.">
-  <meta name="twitter:image" content="https://dino.game/assets/share-1200x630-nochrome.png">
+  <meta name="twitter:image" content="https://dino.game/assets/share-1200x630-en.png">
   <meta name="twitter:image:alt" content="The T-Rex from the dino game, with the internet on">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -45,17 +45,19 @@
   </header>
   <main class="legal-page">
     <h1>Privacy and cookies</h1>
-    <p>Last updated: 17 November 2026</p>
+    <p>Last updated: 18 November 2026</p>
 
     <h2>Who we are</h2>
-    <p>dino.game is run by Hurrell Capital Limited, a company registered in England and Wales (company number 15158828), registered office 65 London Road, Stapleford, Cambridge CB22 5DG. We are the controller of the analytics data described on this page. GitHub is responsible for its own server logs, as explained below. To contact us about privacy, email <a href="mailto:hello@dino.game">hello@dino.game</a>.</p>
+    <p>dino.game is run by Hurrell Capital Limited, a company registered in England and Wales (company number 15158828), registered office 65 London Road, Stapleford, Cambridge CB22 5DG. We are the controller of the analytics data and leaderboard entries described on this page. GitHub is responsible for its own server logs, as explained below. To contact us about privacy, email <a href="mailto:hello@dino.game">hello@dino.game</a>.</p>
     <p>dino.game is an unofficial fan site. It is not affiliated with, endorsed by or associated with Google or Chrome.</p>
 
     <h2>The short version</h2>
     <p>You can play without an account, and you don't have to accept any cookies to play. We only use Google Analytics if you click Accept. If you reject it, or never choose, the game works exactly the same and nothing is sent to Google Analytics.</p>
+    <p>Adding your score to the leaderboard is optional. If you do, your nickname and score are shown publicly, so please don't use your real name.</p>
 
     <h2>What is stored on your device</h2>
     <p><strong>Things the game needs.</strong> Your high score, your mute setting and your cookie choice are saved in your browser's local storage on this device. They are used only to run the game and remember your choice. No consent is needed for these because they are strictly necessary for things you've asked for. If you accept analytics, a finished run's score and your high score are included in the measurements described below. Clearing your browser's site data resets them.</p>
+    <p>If you save a nickname with Set name or add a score to the leaderboard, your browser saves that nickname. If you add a score, it also saves a removal key. They stay until you clear this site's data.</p>
     <p><strong>Google Analytics cookies (only if you accept).</strong></p>
     <table>
       <thead>
@@ -83,7 +85,7 @@
     </table>
     <p>Until you accept, these cookies aren't set and the Google Analytics script isn't loaded.</p>
 
-    <h2>What Google Analytics measures</h2>
+    <h2>What analytics measures</h2>
     <p>If you accept, we measure page views, starting a game, finishing a run (including that run's score and the high score saved on your device), mute changes and fullscreen use, plus Google Analytics' standard automatic measurements, such as scrolling, clicks on links to other sites and time on the page. Google Analytics also receives technical details: your browser and its version, your operating system and its version, your device type, brand and model, your screen resolution, the page that sent you here, and your approximate location down to town or city level, worked out from your IP address. Google says Google Analytics 4 does not log or store IP addresses. We can't see who you are. We look at the results only as totals, to understand how the site is used and make it better.</p>
     <p>We have turned off Google Signals and all of Google Analytics' data-sharing settings, and the site tells Google Analytics not to use your data for advertising or ads personalisation. Google uses this data only to provide and maintain the Analytics service for us. We haven’t linked Google Analytics to any other Google product, such as Google Ads.</p>
 
@@ -94,25 +96,38 @@
     <h2>Changing your mind</h2>
     <p>You can withdraw consent at any time using the <a href="#cookie-settings"><strong>Cookie settings</strong></a> link at the bottom of every page. That switches analytics off straight away and deletes the Google Analytics cookies this site set. Withdrawing doesn't affect anything measured before you withdrew. You can also block or delete cookies in your browser settings.</p>
 
+    <h2 id="leaderboard">The leaderboard</h2>
+    <p>If you choose to add your score to the leaderboard, we store the nickname you enter, your score, the date and time it was submitted, which language version of the site you were using, and a scrambled (hashed) copy of your removal key so we can check removal requests. Nothing goes on the leaderboard unless you submit it.</p>
+    <p>When you start a game, your browser asks our leaderboard server for a one-time game token, which helps us spot faked scores. This happens even if you never add a score. To deliver it, and whenever you add or report a score, Cloudflare sees your IP address. We use it briefly, in memory only, to limit how often requests can be made, and to make the network code used when you report a name, as explained below. We don't store your IP address. Cloudflare is itself responsible for some data about visitors' connections, such as IP addresses, which it uses to run and secure its network, as explained in the <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare Privacy Policy</a>. We do this because we have a legitimate interest in keeping the leaderboard fair and secure (Article 6(1)(f)).</p>
+    <p>Your nickname, score and the date you played are shown publicly in the daily and all-time top 10. Please don't use your real name or anything that could identify you, such as your surname, school, age, address, email or phone number. We block some words and anything that looks like contact details, and we remove nicknames that break these rules.</p>
+    <p>If you report a nickname, and a score was posted from the game you're playing, we store the report and the time, with a scrambled (hashed) code made from that game's token. For about a day, while we keep a record of that token, the report could be matched to the score you posted. Reports from games that didn't post a score aren't stored. For 24 hours, then deleted within 10 minutes, we also keep scrambled codes made from your network's address range, not your own IP address, so that a network's report counts only once a day for each name, and for no more than 10 names a day. Everyone on the same network, such as a school, shares this. Reports are deleted after 30 days, or sooner if the score is deleted.</p>
+    <p>If you save a nickname with Set name, your browser remembers it so it's ready next time. It isn't sent to us until you add a score. When you add a score, your browser also remembers the nickname you used and a random removal key, so you can remove your own scores later. You can clear these from your device by clearing this site's data in your browser. Our server keeps your nickname with your score, but only a scrambled copy of the key. If you clear your browser's copy, you can still ask us to remove a score by email.</p>
+    <p>We use this information because we have a legitimate interest in running a leaderboard that players choose to join (Article 6(1)(f)). We only use it to run the leaderboard, never for advertising.</p>
+    <p>Leaderboard entries are stored with Cloudflare, Inc., which runs the leaderboard for us as our processor under its Data Processing Addendum. Cloudflare may process this data in the United States and other countries, protected by its certification under the EU-U.S. Data Privacy Framework and its UK Extension, and by the standard contractual clauses in that addendum.</p>
+    <p>How long we keep it: each score is deleted at our daily clean-up once it is more than 30 days old and isn't one of the 100 highest scores ever posted here. Those top 100 scores are kept while they stay there. Our database provider keeps an automatic recovery history, so deleted leaderboard data could be restored for up to 30 days after it's deleted. We'd only use it to recover from a fault. If we did, our clean-up would delete again anything past its time limit, and we'd remove again any score you'd asked us by email to remove. A score you removed yourself in that time could come back; if it does, email us and we'll remove it.</p>
+    <p>Removing a score: email <a href="mailto:hello@dino.game">hello@dino.game</a> with the nickname, the score and roughly when you played, and we'll remove it within 7 days. A parent or carer can ask on a child's behalf.</p>
+
     <h2>Who receives your data</h2>
     <ul>
       <li><strong>Google</strong> (Google Ireland Limited for UK and EU visitors, together with Google LLC in the US) provides Google Analytics. It acts as our processor under Google's data processing terms.</li>
+      <li><strong>Cloudflare, Inc.</strong> runs our leaderboard and stores leaderboard entries as our processor under its Data Processing Addendum. Cloudflare is also responsible itself, as an independent controller, for some data about visitors' connections, such as IP addresses, which it uses to run and secure its network, under the <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare Privacy Policy</a>. We don't receive that data.</li>
       <li><strong>GitHub, Inc.</strong> hosts the site on GitHub Pages. According to <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages">GitHub's documentation</a>, when a GitHub Pages site is visited, the visitor's IP address is logged and stored for security purposes, whether or not the visitor is signed in to GitHub. GitHub handles this data as an independent controller under the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub General Privacy Statement</a>. We don't receive or have access to these logs.</li>
     </ul>
     <p>We don't sell your data or use it to show you personalised ads.</p>
 
     <h2>International transfers</h2>
-    <p>Google and GitHub, Inc. may process data in the United States and other countries. Where data leaves the UK or the EU, it is protected by one of these: Google LLC's certification under the EU-US Data Privacy Framework and its UK Extension (the UK-US data bridge); the European Commission's Standard Contractual Clauses; or the UK International Data Transfer Addendum, included in Google's data processing terms. GitHub has certified under the EU-US Data Privacy Framework and its UK Extension (the UK-US data bridge), as set out in the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub General Privacy Statement</a>. That statement also says GitHub generally relies on the European Commission's Standard Contractual Clauses for transfers to countries without an adequacy decision.</p>
+    <p>Google, GitHub, Inc. and Cloudflare, Inc. may process data in the United States and other countries. Where data leaves the UK or the EU, it is protected by one of these: Google LLC's certification under the EU-US Data Privacy Framework and its UK Extension (the UK-US data bridge); the European Commission's Standard Contractual Clauses; or the UK International Data Transfer Addendum, included in Google's data processing terms. GitHub has certified under the EU-US Data Privacy Framework and its UK Extension (the UK-US data bridge), as set out in the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub General Privacy Statement</a>. That statement also says GitHub generally relies on the European Commission's Standard Contractual Clauses for transfers to countries without an adequacy decision.</p>
 
     <h2>How long we keep it</h2>
     <p>Google Analytics keeps event-level data for 2 months, then deletes it automatically in its next monthly clean-up. The totals and reports we've already produced may be kept longer, but they don't identify anyone. The cookies above last up to 2 years unless you delete them or withdraw consent. GitHub logs visitors' IP addresses for security, as described above. The <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub General Privacy Statement</a> does not give a fixed retention period for that data.</p>
+    <p>Leaderboard entries: see <a href="#leaderboard">The leaderboard</a> above.</p>
 
     <h2>Children</h2>
-    <p>The game is suitable for all ages. If you're under 13, please ask a parent or carer before clicking Accept. Analytics stays off unless someone accepts it. We don't knowingly collect anything that identifies a child.</p>
+    <p>Children play this game, and it's suitable for all ages. Analytics stays off unless someone clicks Accept, and the leaderboard asks for a nickname only, never an email address, account or real name. There's no way for players to contact each other. If you're under 13, please ask a parent or carer before clicking Accept or adding a score. We don't ask for anything that identifies a child. If you think a child has put personal details on the leaderboard, email <a href="mailto:hello@dino.game">hello@dino.game</a> and we'll remove them.</p>
 
     <h2>Your rights</h2>
-    <p>You have the right to access, correct or delete your personal data, to restrict or object to its use, to data portability, and to withdraw consent at any time. Because we only hold pseudonymous analytics data, we may need details from you, such as your <code>_ga</code> cookie value, to find records relating to you. To use any of these rights, email <a href="mailto:hello@dino.game">hello@dino.game</a>.</p>
-    <p>If you're unhappy with how we handle your data, please tell us first. You also have the right to complain to the Information Commissioner's Office (<a href="https://ico.org.uk">ico.org.uk</a>, 0303 123 1113) or, in the EU, to your local data protection authority.</p>
+    <p>You have the right to access, correct or delete your personal data, to restrict or object to its use, to data portability, and to withdraw consent at any time. The only personal data we hold is pseudonymous analytics data, any leaderboard entries you choose to add, reports made on the leaderboard, and short-lived scrambled codes used to stop misuse, so we may need details from you to find your records, such as your <code>_ga</code> cookie value, or the nickname, score and roughly when you played. To use any of these rights, email <a href="mailto:hello@dino.game">hello@dino.game</a>.</p>
+    <p>If you're unhappy with how we handle your data, please tell us first. You also have the right to complain to the Information Commission, still known as the ICO (<a href="https://ico.org.uk">ico.org.uk</a>, 0303 123 1113) or, in the EU, to your local data protection authority.</p>
 
     <h2>Ads</h2>
     <p>There are no ads on dino.game at the moment. If we add ads, we'll update this page first. Any ads that use cookies or personalisation will only load after you've given separate consent.</p>
@@ -121,7 +136,7 @@
     <p>If this notice changes, we'll update the date at the top.</p>
   </main>
   <footer class="site-footer">
-    <p>Game based on the Chromium T-Rex runner, © The Chromium Authors, used under a BSD licence. Unofficial; not made or endorsed by Google.</p>
+    <p>Game based on the Chromium T-Rex runner, © The Chromium Authors, used under the <a href="/license/">BSD 3-Clause licence</a>. Unofficial; not made or endorsed by Google.</p>
     <p>Google and Chrome are trademarks of Google LLC.</p>
     <ul class="footer-links">
       <li><a href="/">Play</a></li>

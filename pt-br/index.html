@@ -16,6 +16,7 @@
   <link rel="icon" type="image/png" href="/assets/favicon.png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="dino-leaderboard-api" content="https://dino-leaderboard.dinogame.workers.dev">
   <meta name="theme-color" content="#fafaf8">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
@@ -101,7 +102,7 @@
           },
           {
             "@type": "Question",
-            "name": "Como abrir o jogo no Chrome?",
+            "name": "Onde mais dá para jogar?",
             "acceptedAnswer": {
               "@type": "Answer",
               "text": "Digite chrome://dino na barra de endereço do Chrome, ou espere a página de erro aparecer quando a internet cair e comece o jogo por lá. O endereço funciona mesmo quando você está online."
@@ -120,7 +121,7 @@
             "name": "O que acontece depois de 99.999?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "O contador passa para seis dígitos e a partida continua. Pelas nossas contas, com base no código do Chrome, chegar a 99.999 leva cerca de 90 minutos jogando sem bater."
+              "text": "O contador passa para seis dígitos e a partida continua. Pelas nossas contas, com base no código do Chrome, chegar a 99.999 leva cerca de 90 minutos jogando sem bater. Nosso top 10 só aceita pontuações até 99.999."
             }
           },
           {
@@ -133,7 +134,7 @@
           },
           {
             "@type": "Question",
-            "name": "Por que o Chromebook diz que o proprietário desativou o jogo?",
+            "name": "Por que o notebook da escola ou do trabalho diz que o proprietário desativou o jogo?",
             "acceptedAnswer": {
               "@type": "Answer",
               "text": "Alguns Chromebooks gerenciados escondem o jogo com uma política de administrador chamada AllowDinosaurEasterEgg. Isso só afeta a versão do jogo que vem no Chrome daquele aparelho. Este site continua funcionando num navegador comum."
@@ -174,6 +175,68 @@
     "text": "Só usamos o Google Analytics se você aceitar, e nenhum cookie de análise é salvo antes de você escolher. Mais detalhes na \u003ca href=\"/privacy/\">página de privacidade\u003c/a> e nas \u003ca href=\"#cookie-settings\">configurações de cookies\u003c/a>.",
     "accept": "Aceitar",
     "reject": "Recusar"
+  },
+  "leaderboard": {
+    "heading": "Os 10 melhores",
+    "periodGroup": "Período do placar",
+    "today": "Hoje",
+    "allTime": "Geral",
+    "countdown": "Novo placar em {time}",
+    "countdownShort": "{h} h {m} min",
+    "countdownMinutes": "em {m} min",
+    "hour": "hora",
+    "hours": "horas",
+    "minute": "minuto",
+    "minutes": "minutos",
+    "and": " e ",
+    "you": "você",
+    "qualifyToday": "Você entrou no top 10",
+    "qualifyAll": "Você entrou no top 10 geral",
+    "nameLabel": "Seu nome",
+    "publicLine": "Esse nome fica público. Não use seu nome verdadeiro.",
+    "post": "Publicar",
+    "skip": "Agora não",
+    "hint": "Só letras, números, espaços, - e _",
+    "errChars": "Só letras, números, espaços, - e _",
+    "errLength": "Use de 2 a 16 caracteres",
+    "errBlocked": "Tente outro nome",
+    "privacyLink": "Os nomes são públicos",
+    "savedToday": "Salvo! {nth} lugar hoje.",
+    "savedAll": "Salvo! {nth} lugar no geral.",
+    "newBest": "Novo recorde, e você continua em {nth} lugar",
+    "empty": "Ainda não tem nenhuma pontuação",
+    "loading": "Carregando",
+    "errorTitle": "Não deu para carregar o placar",
+    "offlineTitle": "Você está sem internet",
+    "tryAgain": "Tentar de novo",
+    "report": "Denunciar",
+    "reported": "Denúncia enviada. Obrigado!",
+    "remove": "Remover",
+    "removeConfirm": "Tirar sua pontuação do placar?",
+    "yes": "Sim",
+    "no": "Não",
+    "removed": "Pronto, sua pontuação saiu do placar.",
+    "postFailed": "Não deu para publicar agora.",
+    "tokenError": "Não dá para publicar esta partida, mas a próxima você pode.",
+    "rateError": "Muitas tentativas seguidas. Espere um minuto.",
+    "busyError": "O placar está muito movimentado. Tente de novo daqui a um minuto.",
+    "ordinal": "masc",
+    "thousands": ".",
+    "howToPlayNote": "Se a sua partida entrar no top 10, dá para colocar no placar.",
+    "faqEnd": "Se quiser publicar sua pontuação, esta página também tem um top 10 não oficial. De qualquer jeito, seu recorde fica salvo neste navegador.",
+    "faqRecord": "Nosso top 10 também não é oficial, e não dá para barrar toda trapaça.",
+    "footerLink": "Os 10 melhores",
+    "saved": "Salvo!",
+    "newBestPlain": "Novo recorde!",
+    "overCap": "O placar só vai até 99.999, então não dá para publicar esta partida.",
+    "faqCap": "Nosso top 10 só aceita pontuações até 99.999.",
+    "setName": "Escolher nome",
+    "saveName": "Salvar",
+    "cancelName": "Cancelar",
+    "changeName": "Seu nome",
+    "reportConfirm": "Denunciar este nome?",
+    "reportFailed": "Não deu para enviar a denúncia agora.",
+    "removeFailed": "Não deu para remover agora."
   }
 }
   </script>
@@ -201,6 +264,7 @@
       <p class="dek">O dinossaurinho que aparece no Chrome quando a internet cai. Aqui você joga mesmo com a conexão funcionando.</p>
       <div class="toolbar">
         <div class="toolbar-actions">
+          <button type="button" class="name-control board-only" id="name-control" aria-expanded="false" aria-controls="board-entry-slot" data-change="Seu nome" data-set="Escolher nome"><span class="name-control-label">Escolher nome</span></button><script>(function(){try{var n=localStorage.getItem('dino.game.leaderboardName'),b=document.getElementById('name-control');if(n&&b){b.firstChild.textContent=n;b.setAttribute('aria-label',b.getAttribute('data-change')+', '+n);}}catch(e){}})();</script>
           <button type="button" id="mute-button" aria-pressed="false">Silenciar</button>
           <button type="button" id="fullscreen-button" aria-pressed="false">Tela cheia</button>
         </div>
@@ -222,12 +286,43 @@
       <p class="score-line" id="high-score-label">Seu recorde neste aparelho: ainda nenhum</p>
     </div>
 
+    <section class="board" id="top10" aria-labelledby="top10-title">
+      <h2 class="visually-hidden" id="top10-title">Os 10 melhores</h2>
+      <p class="visually-hidden" id="board-msg" role="status" aria-live="polite" aria-atomic="true"></p>
+      <div class="entry-anchor" id="board-entry-slot"></div>
+      <div class="board-columns">
+        <div class="pixel-frame board-panel" data-col="today">
+          <div class="pixel-inner">
+            <div class="board-head">
+              <div class="board-switch" role="group" aria-label="Período do placar">
+                <button type="button" data-period="today" aria-pressed="true">Hoje</button>
+                <button type="button" data-period="all" aria-pressed="false">Geral</button>
+              </div>
+              <h3 class="board-period-title">Hoje</h3>
+              <p class="board-count" id="board-meta"></p>
+            </div>
+            <div class="board-body" id="board-body" data-state="idle"></div>
+          </div>
+        </div>
+        <div class="pixel-frame board-panel board-panel--all" data-col="all">
+          <div class="pixel-inner">
+            <div class="board-head">
+              <h3 class="board-period-title">Geral</h3>
+            </div>
+            <div class="board-body" id="board-body-all" data-state="idle"></div>
+          </div>
+        </div>
+      </div>
+      <p class="board-foot"><a href="/privacy/#leaderboard">Os nomes são públicos</a></p>
+    </section>
+
     <article class="article" id="article">
       <h2>Como jogar</h2>
       <p>O jogo do dinossauro é uma corrida sem fim. O T-Rex fica num deserto cinza e, quando você começa, o chão vai passando e os cactos vêm pela direita. Depois de um tempo, aparecem também os pterodáctilos. A partida acaba quando você bate em alguma coisa. O número no canto superior direito mostra quanto você já correu.</p>
       <p>No computador, aperte Espaço ou a seta para cima (ou clique no jogo) para começar e para pular. Segure a tecla para pular mais alto e passar por cima de um grupo de cactos grandes, ou solte logo depois que o dino sair do chão para dar um pulinho, o suficiente para um cacto pequeno. A seta para baixo faz o dinossauro se abaixar e, se você apertar no ar, ele desce mais rápido. Depois de bater, aperte Enter para começar outra partida na hora. Espaço e a seta para cima também funcionam, mas só depois de uma pequena pausa. Você também pode clicar no jogo.</p>
       <p>No celular ou no tablet, toque no jogo para começar e para pular. Na tela de toque não dá para abaixar; para isso, só com teclado. Vire o celular ou o tablet na horizontal para ver melhor o que vem pela frente.</p>
       <p>Não precisa se cadastrar e não tem anúncio antes do jogo. O botão Silenciar desliga os bipes, e o botão Tela cheia deixa o jogo ocupando a tela toda. Seu recorde e a configuração de som ficam salvos neste navegador.</p>
+      <p class="board-only board-note">Se a sua partida entrar no top 10, dá para colocar no placar.</p>
 
       <h2>Dicas para fazer mais pontos</h2>
       <p>Olhe para o lado direito da tela, não para o dinossauro. É bem mais fácil acertar a hora de pular quando você vê os obstáculos chegando do que quando fica olhando para os pés do T-Rex. Na velocidade máxima, quase sempre você bate porque pulou tarde demais.</p>
@@ -241,15 +336,18 @@
 
       <h3>Qual é o nome desse jogo?</h3>
       <p>Ele tem vários nomes. No Brasil, muita gente chama de jogo do dino. Em inglês, ele aparece como dinosaur game, dino game, Chrome dino ou T-Rex runner, e também é conhecido como o jogo offline do Chrome. O personagem às vezes é chamado de Lonely T-Rex (o T-Rex solitário).</p>
-      <h3>Como abrir o jogo no Chrome?</h3>
+      <h3>Onde mais dá para jogar?</h3>
       <p>Digite <span class="kbd">chrome://dino</span> na barra de endereço do Chrome, ou espere a página de erro aparecer quando a internet cair e comece o jogo por lá. O endereço funciona mesmo quando você está online.</p>
       <h3>O jogo tem fim?</h3>
       <p>Não. Não existe linha de chegada, e a partida só acaba quando você bate em alguma coisa. Talvez você já tenha ouvido falar dos “17 milhões de anos”: isso é uma referência ao tempo em que o T-Rex existiu, não um final de verdade. O único objetivo é bater o seu próprio recorde.</p>
+      <p class="board-only">Se quiser publicar sua pontuação, esta página também tem um top 10 não oficial. De qualquer jeito, seu recorde fica salvo neste navegador.</p>
       <h3>O que acontece depois de 99.999?</h3>
       <p>O contador passa para seis dígitos e a partida continua. Pelas nossas contas, com base no código do Chrome, chegar a 99.999 leva cerca de 90 minutos jogando sem bater.</p>
+      <p class="board-only">Nosso top 10 só aceita pontuações até 99.999.</p>
       <h3>Existe um recorde mundial oficial?</h3>
       <p>Que a gente saiba, não. O Google não publica ranking nem recorde oficial, e é fácil trapacear ou usar bots, então desconfie das pontuações enormes que circulam por aí.</p>
-      <h3>Por que o Chromebook diz que o proprietário desativou o jogo?</h3>
+      <p class="board-only">Nosso top 10 também não é oficial, e não dá para barrar toda trapaça.</p>
+      <h3>Por que o notebook da escola ou do trabalho diz que o proprietário desativou o jogo?</h3>
       <p>Alguns Chromebooks gerenciados escondem o jogo com uma política de administrador chamada AllowDinosaurEasterEgg. Isso só afeta a versão do jogo que vem no Chrome daquele aparelho. Este site continua funcionando num navegador comum.</p>
       <h3>Dá para ver o código-fonte do jogo?</h3>
       <p>Dá. O jogo faz parte do projeto Chromium e usa a licença BSD de 3 cláusulas. O código atual, em TypeScript, fica em <span class="kbd">components/neterror/resources/dino_game/</span> no código-fonte do Chromium. A nossa adaptação e o texto completo da licença estão na <a href="/license/">página de licença</a>.</p>
@@ -263,6 +361,7 @@
       <li><a href="/license/">Licença</a></li>
       <li><a href="/privacy/">Privacidade</a></li>
       <li><a href="#faq">Perguntas frequentes</a></li>
+      <li class="board-only"><a href="#top10">Os 10 melhores</a></li>
       <li><a href="#cookie-settings">Configurações de cookies</a></li>
     </ul>
   </footer>
