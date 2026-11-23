@@ -354,6 +354,7 @@
   // the two can never contradict each other. Elsewhere the CMP shows no
   // message and our analytics banner works exactly as without the CMP.
   var pendingAnalytics = null;
+  var cmpFallback = false;
   function watchConsentModeUpdates() {
     function inspect(args) {
       if (!args || args[0] !== 'consent' || args[1] !== 'update' || !args[2] ||
@@ -418,7 +419,11 @@
     }
     // If Google's CMP never answers (blocked, offline, account off), fall
     // back to our own banner: GA stays opt-in and no ads are requested.
-    var timer = setTimeout(function () { decide(false); }, ADS.cmpTimeoutMs || 4000);
+    var timer = setTimeout(function () {
+      // Never request ads after a fallback: we can't tell whether GDPR applies.
+      cmpFallback = true;
+      decide(false);
+    }, ADS.cmpTimeoutMs || 4000);
     var tries = 0;
     (function waitTcf() {
       if (typeof window.__tcfapi !== 'function') {
@@ -452,7 +457,9 @@
         resolvedCbs.push(cb);
       }
     },
-    mode: function () { return mode; }
+    mode: function () { return mode; },
+    // true when Google's CMP never answered and our banner took over.
+    cmpFallback: function () { return cmpFallback; }
   };
 
   function init() {
