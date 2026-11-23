@@ -318,6 +318,14 @@
       <p class="board-foot"><a href="/privacy/#leaderboard">Los nombres son públicos</a></p>
     </section>
 
+    <!-- Ad slot (ads.config.json). Below the game AND the Top 10, never above or over the
+         canvas. Hidden (display:none, no space) while .ad-slot--empty is on, which is always
+         while ADS_ENABLED is false. build.mjs stamps data-ad-client and data-ad-slot. -->
+    <div class="ad-slot ad-slot--empty" id="ad-below-game">
+      <p class="ad-slot-label">Publicidad</p>
+      <ins class="adsbygoogle ad-unit" data-ad-client="ca-pub-1864219405145758" data-ad-slot="PLACEHOLDER_AD_UNIT_ID_BELOW_GAME"></ins>
+    </div>
+
     <article class="article" id="article">
       <h2>Cómo se juega</h2>
       <p>El juego del dinosaurio es una carrera que no se acaba nunca. El T-Rex corre por un desierto gris: en cuanto empiezas, el suelo se pone en movimiento y los cactus van apareciendo por la derecha. Un poco más adelante llegan también los pterodáctilos. La partida termina cuando chocas con algo. El número de arriba a la derecha marca la distancia que llevas recorrida.</p>

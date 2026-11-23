@@ -1557,17 +1557,70 @@ html:has(meta[name="dino-leaderboard-api"]) .toolbar .name-control.board-only {
   }
 }
 
-/* When an ad is approved, drop .ad-slot--empty so the reserved 90px slot
-   appears from the first paint (no late JS show, no CLS). */
+/* Ad slot below the game and the Top 10 (ads.config.json, DEV-4).
+   - While ADS_ENABLED is false the markup keeps .ad-slot--empty: display:none,
+     no box, no space, so the page is exactly as before (zero CLS).
+   - When ads are enabled the build drops .ad-slot--empty, so the slot's full
+     height (label + unit) is reserved in CSS from the first paint, before any
+     ad script runs. Nothing below it moves when an ad arrives.
+   - Fixed sizes, one unit: 320x100 below 48rem, 728x90 from 48rem (AdSense
+     "exact size per screen width" via CSS on the <ins>, no data-ad-format,
+     so the unit can never resize itself).
+   - The label shows only once Google marks the unit filled; an unfilled unit
+     is made invisible but keeps its reserved space (no collapse, no CLS). */
+:root {
+  --ad-label-h: 1.25rem;
+  --ad-w: 320px;
+  --ad-h: 100px;
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --ad-w: 728px;
+    --ad-h: 90px;
+  }
+}
+
 .ad-slot {
-  width: 100%;
-  max-width: 728px;
-  height: 90px;
-  min-height: 90px;
-  margin: 1.25rem auto 0;
+  display: block;
+  box-sizing: content-box;
+  /* Exactly the unit's width, centred even when the column is narrower
+     (a 320px unit on a 320px phone bleeds into the page padding). */
+  width: var(--ad-w);
+  max-width: 100vw;
+  height: calc(var(--ad-label-h) + var(--ad-h));
+  margin: 2rem 0 0 calc(50% - var(--ad-w) / 2);
+  padding: 0;
   background: transparent;
   border: 0;
   overflow: hidden;
+  contain: layout size;
+}
+
+.ad-slot .ad-slot-label {
+  height: var(--ad-label-h);
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: var(--ad-label-h);
+  letter-spacing: 0.02em;
+  text-align: center;
+  visibility: hidden;
+}
+
+.ad-slot .ad-unit {
+  display: block;
+  width: var(--ad-w);
+  height: var(--ad-h);
+  margin: 0 auto;
+}
+
+.ad-slot:has(ins.adsbygoogle[data-ad-status="filled"]) .ad-slot-label {
+  visibility: visible;
+}
+
+.ad-slot:has(ins.adsbygoogle[data-ad-status="unfilled"]) {
+  visibility: hidden;
 }
 
 .ad-slot--empty {
@@ -1580,12 +1633,11 @@ html:has(meta[name="dino-leaderboard-api"]) .toolbar .name-control.board-only {
   border: 0;
 }
 
-.ad-slot .ad-slot-label {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
+/* Never printed. */
+@media print {
+  .ad-slot {
+    display: none;
+  }
 }
 
 .article {
@@ -1826,8 +1878,9 @@ html:has(meta[name="dino-leaderboard-api"]) .toolbar .name-control.board-only {
   }
 
   .ad-slot {
-    /* Short landscape: hide the empty slot outright (no reserved 90px,
-       no later JS show that would shift layout). */
+    /* Short landscape: the game fills the screen, so the slot is hidden
+       outright (no reserved space, no later JS show that would shift layout;
+       js/ads.js never requests an ad for a slot with no width). */
     display: none;
     height: 0;
     min-height: 0;

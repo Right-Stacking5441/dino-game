@@ -231,6 +231,14 @@
       <p class="board-foot"><a href="/privacy/#leaderboard">Names are public</a></p>
     </section>
 
+    <!-- Ad slot (ads.config.json). Below the game AND the Top 10, never above or over the
+         canvas. Hidden (display:none, no space) while .ad-slot--empty is on, which is always
+         while ADS_ENABLED is false. build.mjs stamps data-ad-client and data-ad-slot. -->
+    <div class="ad-slot ad-slot--empty" id="ad-below-game">
+      <p class="ad-slot-label">Advertisement</p>
+      <ins class="adsbygoogle ad-unit" data-ad-client="ca-pub-1864219405145758" data-ad-slot="PLACEHOLDER_AD_UNIT_ID_BELOW_GAME"></ins>
+    </div>
+
     <article class="article" id="article">
       <h2>How to play</h2>
       <p>It’s an endless runner. The T-Rex stands in a grey desert, and once you start, the ground scrolls and cacti come in from the right, with pterodactyls joining them later. The run ends when you hit something. The number in the top right is how far you’ve run.</p>

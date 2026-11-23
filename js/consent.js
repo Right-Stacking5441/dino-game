@@ -5,6 +5,27 @@
   var GA_ID = 'G-GYZFSQV2F8';
   var host = location.hostname;
   var isProd = host === 'dino.game' || host === 'www.dino.game';
+  // DEV-4: set by an inline script that build.mjs adds ONLY when
+  // CMP_ENABLED or ADS_ENABLED is true in ads.config.json. When it is
+  // absent (this release) every line below behaves exactly as before.
+  var ADS = window.DINO_ADS_CONFIG || null;
+  var CMP_ON = !!(ADS && ADS.cmp);
+  // 'pending' until Google's CMP says whether GDPR (UK/EEA/CH) applies;
+  // then 'cmp' (Google's message is the only banner and the only source of
+  // truth for analytics and ads) or 'site' (our own analytics banner).
+  var mode = CMP_ON ? 'pending' : 'site';
+  var resolved = false;
+  var resolvedCbs = [];
+  function markResolved() {
+    if (resolved) {
+      return;
+    }
+    resolved = true;
+    var cbs = resolvedCbs.splice(0);
+    for (var i = 0; i < cbs.length; i++) {
+      try { cbs[i](mode); } catch (e) { /* ignore */ }
+    }
+  }
 
   window.dataLayer = window.dataLayer || [];
   window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
@@ -25,6 +46,13 @@
     var s = document.createElement('script');
     s.async = true;
     s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    if (CMP_ON) {
+      s.onload = function () {
+        if (window.__dinoRewrapDataLayer) {
+          window.__dinoRewrapDataLayer();
+        }
+      };
+    }
     document.head.appendChild(s);
     window.gtag('js', new Date());
     window.gtag('config', GA_ID, {
@@ -158,6 +186,7 @@
         store('granted');
         applyConsent('granted');
         hideBanner();
+        markResolved();
       });
     }
     if (reject) {
@@ -166,6 +195,7 @@
         applyConsent('denied');
         clearGaCookies();
         hideBanner();
+        markResolved();
       });
     }
   }
@@ -222,6 +252,18 @@
   function openCookieSettings(event) {
     if (event) {
       event.preventDefault();
+    }
+    if (mode === 'cmp') {
+      // One place for both choices: Google's message (analytics via Consent
+      // Mode, ads via TCF). Our banner is never shown alongside it.
+      window.googlefc = window.googlefc || {};
+      window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+      window.googlefc.callbackQueue.push(function () {
+        if (typeof window.googlefc.showRevocationMessage === 'function') {
+          window.googlefc.showRevocationMessage();
+        }
+      });
+      return;
     }
     // Persist denial so a withdrawal is not forgotten on reload.
     // Cookie settings still re-opens the banner so the choice can be changed.
@@ -293,12 +335,131 @@
     choice = null;
   }
 
-  function init() {
+  function initSite() {
+    mode = 'site';
     if (choice === 'granted' || choice === 'denied') {
       applyConsent(choice);
       hideBanner();
+      markResolved();
     } else {
       showBanner();
+    }
+  }
+
+  // ---- DEV-4: Google's certified CMP (Funding Choices), only if CMP_ON ----
+  // Where GDPR applies (UK, EEA, Switzerland) Google's message is the single
+  // source of truth: its Consent Mode updates (analytics_storage and the
+  // three ad signals) decide whether GA loads, and its TCF string decides
+  // ads. Our banner and our stored analytics choice are not used there, so
+  // the two can never contradict each other. Elsewhere the CMP shows no
+  // message and our analytics banner works exactly as without the CMP.
+  var pendingAnalytics = null;
+  function watchConsentModeUpdates() {
+    function inspect(args) {
+      if (!args || args[0] !== 'consent' || args[1] !== 'update' || !args[2] ||
+          !args[2].analytics_storage) {
+        return;
+      }
+      if (mode === 'pending') {
+        // The CMP can answer before we know GDPR applies; replay it then.
+        pendingAnalytics = args[2].analytics_storage;
+        return;
+      }
+      if (mode !== 'cmp') {
+        return;
+      }
+      if (args[2].analytics_storage === 'granted') {
+        window['ga-disable-' + GA_ID] = false;
+        loadGa();
+      } else if (args[2].analytics_storage === 'denied') {
+        clearGaCookies();
+      }
+    }
+    function wrap() {
+      var dl = window.dataLayer;
+      if (dl.push.__dinoWrapped) {
+        return;
+      }
+      var orig = dl.push;
+      var wrapped = function () {
+        for (var i = 0; i < arguments.length; i++) {
+          inspect(arguments[i]);
+        }
+        return orig.apply(dl, arguments);
+      };
+      wrapped.__dinoWrapped = true;
+      dl.push = wrapped;
+    }
+    wrap();
+    // gtag.js replaces dataLayer.push when it loads; wrap it again.
+    window.__dinoRewrapDataLayer = wrap;
+  }
+
+  function initCmp() {
+    watchConsentModeUpdates();
+    var decided = false;
+    function decide(gdprApplies) {
+      if (decided) {
+        return;
+      }
+      decided = true;
+      if (gdprApplies) {
+        mode = 'cmp';
+        hideBanner();
+        if (pendingAnalytics === 'granted') {
+          window['ga-disable-' + GA_ID] = false;
+          loadGa();
+        }
+        // An analytics choice made in our old banner is not carried over.
+        clearStoredChoice();
+      } else {
+        initSite();
+      }
+    }
+    // If Google's CMP never answers (blocked, offline, account off), fall
+    // back to our own banner: GA stays opt-in and no ads are requested.
+    var timer = setTimeout(function () { decide(false); }, ADS.cmpTimeoutMs || 4000);
+    var tries = 0;
+    (function waitTcf() {
+      if (typeof window.__tcfapi !== 'function') {
+        if (++tries < 80) {
+          setTimeout(waitTcf, 50);
+        }
+        return;
+      }
+      window.__tcfapi('addEventListener', 2.2, function (tc, ok) {
+        if (!ok || !tc) {
+          return;
+        }
+        if (typeof tc.gdprApplies === 'boolean') {
+          clearTimeout(timer);
+          decide(tc.gdprApplies);
+        }
+        if (mode === 'cmp' && (tc.eventStatus === 'tcloaded' || tc.eventStatus === 'useractioncomplete')) {
+          markResolved();
+        }
+      });
+    })();
+  }
+
+  // For js/ads.js: calls back once consent is settled (a stored or new
+  // banner choice, or the CMP's loaded/completed TC data).
+  window.dinoConsent = {
+    onResolved: function (cb) {
+      if (resolved) {
+        cb(mode);
+      } else {
+        resolvedCbs.push(cb);
+      }
+    },
+    mode: function () { return mode; }
+  };
+
+  function init() {
+    if (CMP_ON) {
+      initCmp();
+    } else {
+      initSite();
     }
   }
 

@@ -316,6 +316,14 @@
       <p class="board-foot"><a href="/privacy/#leaderboard">Os nomes são públicos</a></p>
     </section>
 
+    <!-- Ad slot (ads.config.json). Below the game AND the Top 10, never above or over the
+         canvas. Hidden (display:none, no space) while .ad-slot--empty is on, which is always
+         while ADS_ENABLED is false. build.mjs stamps data-ad-client and data-ad-slot. -->
+    <div class="ad-slot ad-slot--empty" id="ad-below-game">
+      <p class="ad-slot-label">Publicidade</p>
+      <ins class="adsbygoogle ad-unit" data-ad-client="ca-pub-1864219405145758" data-ad-slot="PLACEHOLDER_AD_UNIT_ID_BELOW_GAME"></ins>
+    </div>
+
     <article class="article" id="article">
       <h2>Como jogar</h2>
       <p>O jogo do dinossauro é uma corrida sem fim. O T-Rex fica num deserto cinza e, quando você começa, o chão vai passando e os cactos vêm pela direita. Depois de um tempo, aparecem também os pterodáctilos. A partida acaba quando você bate em alguma coisa. O número no canto superior direito mostra quanto você já correu.</p>
